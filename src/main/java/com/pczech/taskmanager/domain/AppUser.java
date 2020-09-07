@@ -1,9 +1,9 @@
 package com.pczech.taskmanager.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,9 +19,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 @Data()
-@NoArgsConstructor
 @AllArgsConstructor()
 @Builder()
 @Entity(name = "users")
@@ -47,14 +47,31 @@ public class AppUser implements UserDetails {
     @Email(message = "It's not correct e-mail address")
     private String email;
 
-    private AppUserRole role = AppUserRole.USER;
+    private AppUserRole role;
 
+    @JsonIgnore()
     private boolean tokenValidation;
 
+    @JsonIgnore()
     private boolean adminApproved;
 
+    @JsonIgnore()
+    private String token;
+
+
+    public AppUser() {
+        this.username = "";
+        this.password = "";
+        this.role = AppUserRole.USER;
+        this.token = UUID.randomUUID().toString();
+    }
+
+    public void generateToken() {
+        this.token = UUID.randomUUID().toString();
+    }
 
     @Override
+    @JsonIgnore()
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + role.toString()));
     }
@@ -70,21 +87,25 @@ public class AppUser implements UserDetails {
     }
 
     @Override
+    @JsonIgnore()
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore()
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore()
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore()
     public boolean isEnabled() {
         return tokenValidation && adminApproved;
     }

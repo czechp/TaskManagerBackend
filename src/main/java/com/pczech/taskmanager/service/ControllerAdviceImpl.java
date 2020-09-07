@@ -1,5 +1,6 @@
 package com.pczech.taskmanager.service;
 
+import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,11 @@ public class ControllerAdviceImpl {
     @ExceptionHandler({BadDataException.class})
     public ResponseEntity<Object> badDataExceptionHandler(Exception e, WebRequest request) {
         return new ResponseEntity<>(createBody("Bad data", e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler({AlreadyExistsException.class})
+    public ResponseEntity<Object> alreadyExistsExceptionHandler(Exception e, WebRequest webRequest) {
+        return new ResponseEntity<>(createBody("Already exists", e.getMessage()), HttpStatus.CONFLICT);
     }
 
     private Map<String, String> createBody(String messageTitle, String message) {
