@@ -34,14 +34,14 @@ public class AppUser implements UserDetails {
     @NotNull(message = "username cannot be null")
     @NotEmpty(message = "username cannot be empty")
     @NotBlank(message = "username cannot be blank")
-    @Length(min = 6)
+    @Length(min = 4)
     private String username;
 
 
     @NotNull(message = "password cannot be null")
     @NotEmpty(message = "password cannot be empty")
     @NotBlank(message = "password cannot be blank")
-    @Length(min = 6)
+    @Length(min = 7)
     private String password;
 
     @Email(message = "It's not correct e-mail address")
