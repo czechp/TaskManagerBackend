@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 
 @RestController()
@@ -22,7 +23,7 @@ public class AppUserController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public AppUser register(@RequestBody() @Valid() AppUser appUser, Errors errors) {
-        return appUserService.register(appUser, errors);
+    public AppUser register(@RequestBody() @Valid() AppUser appUser, Errors errors, ServletRequest servletRequest) {
+        return appUserService.register(appUser, errors, servletRequest);
     }
 }
