@@ -1,6 +1,7 @@
 package com.pczech.taskmanager.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -22,7 +23,8 @@ import java.util.Collections;
 @Data()
 @NoArgsConstructor
 @AllArgsConstructor()
-@Entity(name = "app-users")
+@Builder()
+@Entity(name = "users")
 public class AppUser implements UserDetails {
 
     @Id()
@@ -45,7 +47,7 @@ public class AppUser implements UserDetails {
     @Email(message = "It's not correct e-mail address")
     private String email;
 
-    private AppUserRole role;
+    private AppUserRole role = AppUserRole.USER;
 
     private boolean tokenValidation;
 
