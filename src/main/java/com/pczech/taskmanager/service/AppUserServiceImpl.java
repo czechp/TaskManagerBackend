@@ -3,6 +3,7 @@ package com.pczech.taskmanager.service;
 import com.pczech.taskmanager.domain.AppUser;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
+import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,5 +41,12 @@ public class AppUserServiceImpl implements AppUserService {
         } else
             throw new BadDataException(appUser.getUsername());
 
+    }
+
+    @Override
+    public String activateUserByToken(String token) {
+        AppUser appUser = appUserRepository.findByToken(token).orElseThrow(() -> new NotFoundException("token --- " + token));
+        appUser.setTokenValidation(true);
+        return "User activated";
     }
 }

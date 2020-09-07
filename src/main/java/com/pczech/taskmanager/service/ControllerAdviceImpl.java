@@ -2,6 +2,7 @@ package com.pczech.taskmanager.service;
 
 import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
+import com.pczech.taskmanager.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,6 +25,10 @@ public class ControllerAdviceImpl {
         return new ResponseEntity<>(createBody("Already exists", e.getMessage()), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<Object> notFoundException(Exception e, WebRequest webRequest){
+        return new ResponseEntity<>(createBody("Not found", e.getMessage()), HttpStatus.NOT_FOUND);
+    }
     private Map<String, String> createBody(String messageTitle, String message) {
         Map<String, String> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now().toString());

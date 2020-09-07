@@ -26,4 +26,10 @@ public class AppUserController {
     public AppUser register(@RequestBody() @Valid() AppUser appUser, Errors errors, ServletRequest servletRequest) {
         return appUserService.register(appUser, errors, servletRequest);
     }
+
+    @GetMapping("/activate")
+    @ResponseStatus(HttpStatus.OK)
+    public String activateUser(@RequestParam(value = "token") String token){
+        return appUserService.activateUserByToken(token);
+    }
 }

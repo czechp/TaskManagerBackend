@@ -26,13 +26,14 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         simpleMailMessage.setSubject("Aktywacja konta  w menadżerze zadań");
         simpleMailMessage.setText(
                 "Aby aktywować konto kliknij  w ----> " +
-                        createAddres(servletRequest) +
+                        createAddress(servletRequest) +
+                        "/api/users/activate" +
                         "?token=" +
                         token);
         javaMailSender.send(simpleMailMessage);
     }
 
-    private String createAddres(ServletRequest servletRequest) {
+    private String createAddress(ServletRequest servletRequest) {
         return "http://" + servletRequest.getServerName() + ":" + servletRequest.getServerPort();
     }
 

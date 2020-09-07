@@ -3,6 +3,7 @@ package com.pczech.taskmanager.service;
 import com.pczech.taskmanager.domain.AppUser;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
+import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.repository.AppUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.validation.Errors;
 
 import javax.servlet.ServletRequest;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -85,5 +86,25 @@ class AppUserServiceImplTest {
         assertThrows(AlreadyExistsException.class, () -> appUserService.register(appUser, errors, servletRequest));
     }
 
+    @Test()
+    void activateUserByTokenTest() {
+        //given
+        String token = "Some token";
+        //when
+        when(appUserRepository.findByToken(anyString())).thenReturn(Optional.of(appUser));
+        String result = appUserService.activateUserByToken(token);
+        //then
+        assertEquals("User activated", result);
+    }
+
+    @Test()
+    void activeUserByToken_userNotFound() {
+        //given
+        String token = "Some token";
+        //when
+        when(appUserRepository.findByToken(anyString())).thenReturn(Optional.empty());
+        //then
+        assertThrows(NotFoundException.class, () -> appUserService.activateUserByToken(token));
+    }
 }
 
