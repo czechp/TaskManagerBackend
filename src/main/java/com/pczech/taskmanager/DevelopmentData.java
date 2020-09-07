@@ -27,7 +27,10 @@ public class DevelopmentData {
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
         log.info("Development mode active");
+        createUsers();
+    }
 
+    private void createUsers() {
         //creating some users
         appUserRepository.save(
                 AppUser.builder()
@@ -55,7 +58,5 @@ public class DevelopmentData {
                         .build()
         );
         log.info(appUserRepository.findAll().toString());
-
-
     }
 }
