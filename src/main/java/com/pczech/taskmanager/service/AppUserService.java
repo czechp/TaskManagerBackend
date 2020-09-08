@@ -9,4 +9,6 @@ public interface AppUserService {
     AppUser register(AppUser appUser, Errors errors, ServletRequest servletRequest);
 
     String activateUserByToken(String token);
+
+    String login(AppUser appUser);
 }

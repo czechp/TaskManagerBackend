@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.validation.Errors;
@@ -26,11 +27,14 @@ import static org.mockito.Mockito.when;
 @SpringBootTest()
 @RunWith(SpringRunner.class)
 class AppUserServiceImplTest {
-
-    @MockBean()
-    ServletRequest servletRequest;
+    @Autowired()
+    private AuthenticationManager authenticationManager;
     @Autowired()
     private PasswordEncoder passwordEncoder;
+    @Autowired()
+    private JwtTokenService jwtTokenService;
+    @MockBean()
+    ServletRequest servletRequest;
     @MockBean()
     private AppUserRepository appUserRepository;
     @MockBean()
@@ -42,7 +46,7 @@ class AppUserServiceImplTest {
 
     @BeforeEach()
     public void init() {
-        this.appUserService = new AppUserServiceImpl(appUserRepository, passwordEncoder, emailSenderService);
+        this.appUserService = new AppUserServiceImpl(appUserRepository, passwordEncoder, emailSenderService, authenticationManager, jwtTokenService);
         this.appUser = AppUser.builder()
                 .id(1L)
                 .username("user")

@@ -4,8 +4,11 @@ import com.pczech.taskmanager.domain.AppUser;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
 import com.pczech.taskmanager.exception.NotFoundException;
+import com.pczech.taskmanager.exception.UnauthorizedException;
 import com.pczech.taskmanager.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -17,12 +20,18 @@ public class AppUserServiceImpl implements AppUserService {
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailSenderService emailSenderService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenService jwtTokenService;
+
 
     @Autowired()
-    public AppUserServiceImpl(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, EmailSenderService emailSenderService) {
+    public AppUserServiceImpl(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, EmailSenderService emailSenderService,
+                              AuthenticationManager authenticationManager, JwtTokenService jwtTokenService) {
         this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailSenderService = emailSenderService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenService = jwtTokenService;
     }
 
     @Override
@@ -48,5 +57,15 @@ public class AppUserServiceImpl implements AppUserService {
         AppUser appUser = appUserRepository.findByToken(token).orElseThrow(() -> new NotFoundException("token --- " + token));
         appUser.setTokenValidation(true);
         return "User activated";
+    }
+
+    @Override
+    public String login(AppUser appUser) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(appUser.getUsername(), appUser.getPassword()));
+        } catch (Exception e) {
+            throw new UnauthorizedException("username --- " + appUser.getUsername());
+        }
+        return jwtTokenService.generateToken(appUser.getUsername());
     }
 }

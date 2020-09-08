@@ -4,11 +4,14 @@ import com.pczech.taskmanager.domain.AppUser;
 import com.pczech.taskmanager.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController()
 @RequestMapping("/api/users")
@@ -29,7 +32,14 @@ public class AppUserController {
 
     @GetMapping("/activate")
     @ResponseStatus(HttpStatus.OK)
-    public String activateUser(@RequestParam(value = "token") String token){
+    public String activateUser(@RequestParam(value = "token") String token) {
         return appUserService.activateUserByToken(token);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody() AppUser appUser) {
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("jwt", appUserService.login(appUser));
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 }

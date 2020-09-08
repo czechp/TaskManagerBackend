@@ -38,6 +38,8 @@ public class DevelopmentData {
                         .password(passwordEncoder.encode("user"))
                         .email("user@gmail.com")
                         .role(AppUserRole.USER)
+                        .adminApproved(true)
+                        .tokenValidation(true)
                         .build()
         );
 
@@ -47,6 +49,8 @@ public class DevelopmentData {
                         .password(passwordEncoder.encode("superuser"))
                         .email("superuser@gmail.com")
                         .role(AppUserRole.SUPERUSER)
+                        .adminApproved(true)
+                        .tokenValidation(true)
                         .build()
         );
         appUserRepository.save(
@@ -55,6 +59,8 @@ public class DevelopmentData {
                         .password(passwordEncoder.encode("admin"))
                         .email("admin@gmail.com")
                         .role(AppUserRole.ADMIN)
+                        .adminApproved(true)
+                        .tokenValidation(true)
                         .build()
         );
         log.info(appUserRepository.findAll().toString());
