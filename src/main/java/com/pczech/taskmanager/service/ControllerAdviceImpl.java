@@ -3,6 +3,7 @@ package com.pczech.taskmanager.service;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
 import com.pczech.taskmanager.exception.NotFoundException;
+import com.pczech.taskmanager.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,9 +27,15 @@ public class ControllerAdviceImpl {
     }
 
     @ExceptionHandler({NotFoundException.class})
-    public ResponseEntity<Object> notFoundException(Exception e, WebRequest webRequest){
+    public ResponseEntity<Object> notFoundException(Exception e, WebRequest webRequest) {
         return new ResponseEntity<>(createBody("Not found", e.getMessage()), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler({UnauthorizedException.class})
+    public ResponseEntity<Object> unauthorizedExceptionHandler(Exception e, WebRequest webRequest) {
+        return new ResponseEntity<>(createBody("Unauthorized", e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
     private Map<String, String> createBody(String messageTitle, String message) {
         Map<String, String> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now().toString());
