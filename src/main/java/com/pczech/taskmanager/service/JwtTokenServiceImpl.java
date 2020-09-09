@@ -1,10 +1,15 @@
 package com.pczech.taskmanager.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service()
 public class JwtTokenServiceImpl implements JwtTokenService {
@@ -19,5 +24,21 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * EXPIRATION_MINUTES))
                 .signWith(SignatureAlgorithm.HS256, KEY)
                 .compact();
+    }
+
+    @Override
+    public Map<String, Object> getDataFromToken(String authorizationHeader) {
+        Map<String, Object> result = new HashMap<>();
+        try{
+            String token = authorizationHeader.substring(7);
+            Claims body = Jwts.parser()
+                    .setSigningKey(KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+            result.put("username", body.getSubject());
+            result.put("expiration", body.getExpiration());
+        }catch (Exception e){ }
+
+        return result;
     }
 }

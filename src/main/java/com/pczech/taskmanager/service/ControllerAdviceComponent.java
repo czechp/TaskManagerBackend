@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice()
-public class ControllerAdviceImpl {
+public class ControllerAdviceComponent {
     @ExceptionHandler({BadDataException.class})
     public ResponseEntity<Object> badDataExceptionHandler(Exception e, WebRequest request) {
         return new ResponseEntity<>(createBody("Bad data", e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
