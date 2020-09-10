@@ -12,10 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service()
+@Slf4j()
 public class JwtTokenServiceImpl implements JwtTokenService {
     //todo: Implement it as input program paramenetr
     private final String KEY = "123PCZECH123";
-    private final int EXPIRATION_MINUTES = 10;
+    private final int EXPIRATION_MINUTES = 60;
 
     @Override
     public String generateToken(String username) {
@@ -37,8 +38,15 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                     .getBody();
             result.put("username", body.getSubject());
             result.put("expiration", body.getExpiration());
-        }catch (Exception e){ }
+        }catch (Exception e){
+            log.info("Authorization with incorrect token");
+        }
 
         return result;
+    }
+
+    @Override
+    public boolean tokenNotExpired(Date expiration) {
+        return new Date(System.currentTimeMillis()).before(expiration);
     }
 }

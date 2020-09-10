@@ -1,9 +1,12 @@
 package com.pczech.taskmanager.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -12,9 +15,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 @Component()
+@Slf4j()
 public class AuthorizationFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
     private JwtTokenService jwtTokenService;
@@ -34,13 +39,21 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         if (!dataFromToken.isEmpty()) {
             try {
                 user = userDetailsService.loadUserByUsername((String) dataFromToken.get("username"));
-                usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-            } catch (Exception e) { }
+                usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            } catch (Exception e) {
+                log.info("Authorization with incorrect token");
+            }
         }
 
-        if(user != null && usernamePasswordAuthenticationToken != null){
-            //todo: inject to SecurityContextHolder
+        if (user != null
+                && usernamePasswordAuthenticationToken != null
+                && jwtTokenService.tokenNotExpired((Date) dataFromToken.get("expiration")))
+        {
+            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
+
+
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }
