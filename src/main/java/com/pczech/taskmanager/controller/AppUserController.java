@@ -32,7 +32,7 @@ public class AppUserController {
 
     @GetMapping("/activate")
     @ResponseStatus(HttpStatus.OK)
-    public String activateUser(@RequestParam(value = "token") String token) {
+    public String activateUserByToken(@RequestParam(value = "token") String token) {
         return appUserService.activateUserByToken(token);
     }
 
@@ -46,9 +46,9 @@ public class AppUserController {
 
     @PatchMapping("/activate/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public AppUser activeUser(@PathVariable(value = "id") long id,
-                              @RequestParam(value = "status") String status){
-        return appUserService.activeUser(id, status);
+    public AppUser activateUserByAdmin(@PathVariable(value = "id") long id,
+                                       @RequestParam(value = "status") String status){
+        return appUserService.activateUserByAdmin(id, status);
     }
 
 }

@@ -12,5 +12,5 @@ public interface AppUserService {
 
     String login(AppUser appUser);
 
-    AppUser activeUser(long id, String status);
+    AppUser activateUserByAdmin(long id, String status);
 }

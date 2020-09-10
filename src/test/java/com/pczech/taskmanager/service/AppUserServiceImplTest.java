@@ -20,8 +20,7 @@ import javax.servlet.ServletRequest;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest()
@@ -109,6 +108,57 @@ class AppUserServiceImplTest {
         when(appUserRepository.findByToken(anyString())).thenReturn(Optional.empty());
         //then
         assertThrows(NotFoundException.class, () -> appUserService.activateUserByToken(token));
+    }
+
+    @Test()
+    void activateUserActivateByAdminTest(){
+        //given
+        long id = 4L;
+        String status = "activate";
+        appUser.setAdminApproved(false);
+        //when
+        when(appUserRepository.findById(anyLong())).thenReturn(Optional.of(appUser));
+        when(appUserRepository.save(any())).thenReturn(appUser);
+        AppUser appUser = appUserService.activateUserByAdmin(id, status);
+        //then
+        assertNotNull(appUser);
+        assertTrue(appUser.isAdminApproved());
+    }
+
+    @Test()
+    void activateUserByAdminDeactivateTest(){
+        //given
+        long id = 4L;
+        String status = "deactivate";
+        appUser.setAdminApproved(true);
+        //when
+        when(appUserRepository.findById(anyLong())).thenReturn(Optional.of(appUser));
+        when(appUserRepository.save(any())).thenReturn(appUser);
+        AppUser appUser = appUserService.activateUserByAdmin(id, status);
+        //then
+        assertNotNull(appUser);
+        assertFalse(appUser.isAdminApproved());
+    }
+
+    @Test()
+    void activateUserByAdmin_IncorrectStatus(){
+        //given
+        long id = 4L;
+        String status = "123123123";
+        //when
+        //then
+        assertThrows(BadDataException.class, ()->appUserService.activateUserByAdmin(id, status));
+    }
+
+    @Test()
+    void activateUserByAdmin_UserNotExists(){
+        //given
+        long id = 4L;
+        String status = "activate";
+        //when
+        when(appUserRepository.findById(id)).thenReturn(Optional.empty());
+        //
+        assertThrows(NotFoundException.class, ()->appUserService.activateUserByAdmin(id, status));
     }
 }
 

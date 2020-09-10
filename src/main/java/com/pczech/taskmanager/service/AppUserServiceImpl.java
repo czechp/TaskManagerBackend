@@ -71,18 +71,17 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
 
-    //todo: test for it
     @Override
-    public AppUser activeUser(long id, String status) {
+    public AppUser activateUserByAdmin(long id, String status) {
         activateUserStatusCorrect(status);
         AppUser appUser = appUserRepository.findById(id).orElseThrow(() -> new NotFoundException("user id --- " + id));
-        appUser.setAdminApproved(status.equals("active"));
+        appUser.setAdminApproved(status.equals("activate"));
         return appUserRepository.save(appUser);
 
     }
 
     private void activateUserStatusCorrect(String status) {
-        if (!status.equals("active") && !status.equals("deactivate"))
+        if (!status.equals("activate") && !status.equals("deactivate"))
             throw new BadDataException("Incorrect status value");
     }
 }
