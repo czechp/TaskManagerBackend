@@ -76,7 +76,9 @@ public class AppUserServiceImpl implements AppUserService {
         activateUserStatusCorrect(status);
         AppUser appUser = appUserRepository.findById(id).orElseThrow(() -> new NotFoundException("user id --- " + id));
         appUser.setAdminApproved(status.equals("activate"));
-        return appUserRepository.save(appUser);
+        AppUser result = appUserRepository.save(appUser);
+        result.setPassword("");
+        return result;
 
     }
 

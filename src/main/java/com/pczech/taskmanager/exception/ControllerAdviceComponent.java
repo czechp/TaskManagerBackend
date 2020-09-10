@@ -1,4 +1,4 @@
-package com.pczech.taskmanager.service;
+package com.pczech.taskmanager.exception;
 
 import com.pczech.taskmanager.exception.*;
 import org.springframework.http.HttpStatus;
