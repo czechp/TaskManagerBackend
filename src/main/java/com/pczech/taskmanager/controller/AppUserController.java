@@ -37,9 +37,18 @@ public class AppUserController {
     }
 
     @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> login(@RequestBody() AppUser appUser) {
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("jwt", appUserService.login(appUser));
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
+
+    @PatchMapping("/activate/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AppUser activeUser(@PathVariable(value = "id") long id,
+                              @RequestParam(value = "status") String status){
+        return appUserService.activeUser(id, status);
+    }
+
 }

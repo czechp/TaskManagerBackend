@@ -11,4 +11,6 @@ public interface AppUserService {
     String activateUserByToken(String token);
 
     String login(AppUser appUser);
+
+    AppUser activeUser(long id, String status);
 }

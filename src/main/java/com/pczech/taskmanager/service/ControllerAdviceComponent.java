@@ -1,9 +1,6 @@
 package com.pczech.taskmanager.service;
 
-import com.pczech.taskmanager.exception.AlreadyExistsException;
-import com.pczech.taskmanager.exception.BadDataException;
-import com.pczech.taskmanager.exception.NotFoundException;
-import com.pczech.taskmanager.exception.UnauthorizedException;
+import com.pczech.taskmanager.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -34,6 +31,11 @@ public class ControllerAdviceComponent {
     @ExceptionHandler({UnauthorizedException.class})
     public ResponseEntity<Object> unauthorizedExceptionHandler(Exception e, WebRequest webRequest) {
         return new ResponseEntity<>(createBody("Unauthorized", e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity<Object> badRequestExceptionHandler(Exception e, WebRequest webRequest){
+        return new ResponseEntity<>(createBody("Bad request", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     private Map<String, String> createBody(String messageTitle, String message) {

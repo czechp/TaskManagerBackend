@@ -56,6 +56,7 @@ public class AppUserServiceImpl implements AppUserService {
     public String activateUserByToken(String token) {
         AppUser appUser = appUserRepository.findByToken(token).orElseThrow(() -> new NotFoundException("token --- " + token));
         appUser.setTokenValidation(true);
+        appUserRepository.save(appUser);
         return "User activated";
     }
 
@@ -67,5 +68,21 @@ public class AppUserServiceImpl implements AppUserService {
             throw new UnauthorizedException("username --- " + appUser.getUsername());
         }
         return jwtTokenService.generateToken(appUser.getUsername());
+    }
+
+
+    //todo: test for it
+    @Override
+    public AppUser activeUser(long id, String status) {
+        activateUserStatusCorrect(status);
+        AppUser appUser = appUserRepository.findById(id).orElseThrow(() -> new NotFoundException("user id --- " + id));
+        appUser.setAdminApproved(status.equals("active"));
+        return appUserRepository.save(appUser);
+
+    }
+
+    private void activateUserStatusCorrect(String status) {
+        if (!status.equals("active") && !status.equals("deactivate"))
+            throw new BadDataException("Incorrect status value");
     }
 }
