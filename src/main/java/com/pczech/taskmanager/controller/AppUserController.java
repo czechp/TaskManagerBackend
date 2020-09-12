@@ -41,6 +41,7 @@ public class AppUserController {
     public ResponseEntity<Object> login(@RequestBody() AppUser appUser) {
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("jwt", appUserService.login(appUser));
+        responseBody.put("role", appUserService.getRoleForUser(appUser));
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

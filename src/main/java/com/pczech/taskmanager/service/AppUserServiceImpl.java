@@ -82,6 +82,13 @@ public class AppUserServiceImpl implements AppUserService {
 
     }
 
+    @Override
+    public String getRoleForUser(AppUser appUser) {
+        return appUserRepository.findByUsername(appUser.getUsername())
+                .orElseThrow(() -> new NotFoundException("username --- " + appUser.getUsername()))
+                .getRole().toString();
+    }
+
     private void activateUserStatusCorrect(String status) {
         if (!status.equals("activate") && !status.equals("deactivate"))
             throw new BadDataException("Incorrect status value");

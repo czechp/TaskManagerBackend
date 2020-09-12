@@ -2,6 +2,7 @@ package com.pczech.taskmanager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pczech.taskmanager.domain.AppUser;
+import com.pczech.taskmanager.domain.AppUserRole;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
 import com.pczech.taskmanager.exception.NotFoundException;
@@ -46,6 +47,7 @@ class AppUserControllerTest {
         this.appUser = AppUser.builder()
                 .username("user")
                 .password("user123")
+                .role(AppUserRole.USER)
                 .email("anyEmail@gmail.com")
                 .build();
         this.objectMapper = new ObjectMapper();
@@ -128,13 +130,15 @@ class AppUserControllerTest {
         //given
         //when
         when(appUserService.login(any())).thenReturn("123321");
+        when(appUserService.getRoleForUser(any())).thenReturn("USER");
         //then
         mockMvc.perform(post(URL + "/login")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(appUser)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.jwt").value("123321"));
+                .andExpect(jsonPath("$.jwt").value("123321"))
+                .andExpect(jsonPath("$.role").value("USER"));
     }
 
     @Test()

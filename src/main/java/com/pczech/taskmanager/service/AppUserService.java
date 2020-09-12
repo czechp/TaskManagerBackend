@@ -13,4 +13,6 @@ public interface AppUserService {
     String login(AppUser appUser);
 
     AppUser activateUserByAdmin(long id, String status);
+
+    String getRoleForUser(AppUser appUser);
 }
