@@ -7,6 +7,7 @@ import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.exception.UnauthorizedException;
 import com.pczech.taskmanager.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -72,6 +73,7 @@ public class AppUserServiceImpl implements AppUserService {
 
 
     @Override
+    @Secured({"ROLE_ADMIN"})
     public AppUser activateUserByAdmin(long id, String status) {
         activateUserStatusCorrect(status);
         AppUser appUser = appUserRepository.findById(id).orElseThrow(() -> new NotFoundException("user id --- " + id));

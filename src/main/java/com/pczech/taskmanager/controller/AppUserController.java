@@ -48,7 +48,7 @@ public class AppUserController {
     @PatchMapping("/activate/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AppUser activateUserByAdmin(@PathVariable(value = "id") long id,
-                                       @RequestParam(value = "status") String status){
+                                       @RequestParam(value = "status") String status) {
         return appUserService.activateUserByAdmin(id, status);
     }
 

@@ -1,6 +1,5 @@
 package com.pczech.taskmanager.exception;
 
-import com.pczech.taskmanager.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -34,7 +33,7 @@ public class ControllerAdviceComponent {
     }
 
     @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity<Object> badRequestExceptionHandler(Exception e, WebRequest webRequest){
+    public ResponseEntity<Object> badRequestExceptionHandler(Exception e, WebRequest webRequest) {
         return new ResponseEntity<>(createBody("Bad request", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 

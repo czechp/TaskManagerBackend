@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Configuration()
 public class HibernateConfiguration implements HibernatePropertiesCustomizer {
-    private HibernateInterceptorComponent hibernateInterceptorComponent;
+    private final HibernateInterceptorComponent hibernateInterceptorComponent;
 
     @Autowired()
     public HibernateConfiguration(HibernateInterceptorComponent hibernateInterceptorComponent) {

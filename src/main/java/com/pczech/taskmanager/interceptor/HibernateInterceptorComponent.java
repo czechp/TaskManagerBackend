@@ -4,6 +4,6 @@ import org.hibernate.EmptyInterceptor;
 import org.springframework.stereotype.Component;
 
 @Component()
-public class HibernateInterceptorComponent  extends EmptyInterceptor {
+public class HibernateInterceptorComponent extends EmptyInterceptor {
 
 }

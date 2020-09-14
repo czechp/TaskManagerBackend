@@ -21,8 +21,8 @@ import java.util.Map;
 @Component()
 @Slf4j()
 public class AuthorizationFilter extends OncePerRequestFilter {
-    private UserDetailsService userDetailsService;
-    private JwtTokenService jwtTokenService;
+    private final UserDetailsService userDetailsService;
+    private final JwtTokenService jwtTokenService;
 
     @Autowired()
     public AuthorizationFilter(UserDetailsService userDetailsService, JwtTokenService jwtTokenService) {
@@ -47,8 +47,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
         if (user != null
                 && usernamePasswordAuthenticationToken != null
-                && jwtTokenService.tokenNotExpired((Date) dataFromToken.get("expiration")))
-        {
+                && jwtTokenService.tokenNotExpired((Date) dataFromToken.get("expiration"))) {
             usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
