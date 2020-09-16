@@ -52,4 +52,14 @@ public class AppUserController {
         return appUserService.activateUserByAdmin(id, status);
     }
 
+    @RequestMapping(path = "/username", method = RequestMethod.HEAD)
+    public ResponseEntity existsByUsername(@RequestParam(value = "username") String username) {
+        return appUserService.existsByUsername(username) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    @RequestMapping(path = "/email", method = RequestMethod.HEAD)
+    public ResponseEntity existsByEmail(@RequestParam(value = "email") String email) {
+        return appUserService.existsByEmail(email) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
 }

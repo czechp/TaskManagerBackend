@@ -24,7 +24,7 @@ public class AppUserServiceImpl implements AppUserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
 
-
+    //public method section
     @Autowired()
     public AppUserServiceImpl(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, EmailSenderService emailSenderService,
                               AuthenticationManager authenticationManager, JwtTokenService jwtTokenService) {
@@ -91,6 +91,17 @@ public class AppUserServiceImpl implements AppUserService {
                 .getRole().toString();
     }
 
+    @Override
+    public boolean existsByUsername(String username) {
+        return appUserRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return appUserRepository.existsByEmail(email);
+    }
+
+    //private method section
     private void activateUserStatusCorrect(String status) {
         if (!status.equals("activate") && !status.equals("deactivate"))
             throw new BadDataException("Incorrect status value");

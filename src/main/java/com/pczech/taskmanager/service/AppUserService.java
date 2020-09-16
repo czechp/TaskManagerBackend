@@ -15,4 +15,8 @@ public interface AppUserService {
     AppUser activateUserByAdmin(long id, String status);
 
     String getRoleForUser(AppUser appUser);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }
