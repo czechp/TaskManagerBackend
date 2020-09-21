@@ -1,6 +1,7 @@
 package com.pczech.taskmanager.service;
 
 import com.pczech.taskmanager.domain.AppUser;
+import com.pczech.taskmanager.domain.AppUserRole;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
 import com.pczech.taskmanager.exception.NotFoundException;
@@ -13,9 +14,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
 import javax.servlet.ServletRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @Service()
@@ -116,10 +121,32 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     @Cacheable(value = "users")
     public List<AppUser> findAll() {
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         List<AppUser> users = appUserRepository.findAll();
         users.forEach(x -> x.setPassword(""));
         return users;
+    }
+
+    @Override
+    public List<HashMap<String, String>> findAllUserStatus() {
+        List<HashMap<String, String>> result = new ArrayList<>();
+        Arrays.stream(AppUserRole.values()).forEach(x -> {
+            HashMap<String, String> role = new HashMap<>();
+            role.put("role", x.toString());
+            result.add(role);
+        });
+        return result;
+    }
+
+    @Override
+    @Transactional()
+    @CacheEvict(value = "users", allEntries = true, condition = "#result != null")
+    public AppUser modifyRole(long id, String role) {
+        AppUser appUser = appUserRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("appUser id --- " + id));
+        AppUserRole appUserRole = AppUserRole.getRole(role)
+                .orElseThrow(() -> new NotFoundException("role --- " + role));
+        appUser.setRole(appUserRole);
+        return appUser;
     }
 
     //private method section

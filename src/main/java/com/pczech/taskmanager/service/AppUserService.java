@@ -4,6 +4,7 @@ import com.pczech.taskmanager.domain.AppUser;
 import org.springframework.validation.Errors;
 
 import javax.servlet.ServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 public interface AppUserService {
@@ -24,4 +25,9 @@ public interface AppUserService {
     void deleteUserById(long id);
 
     List<AppUser> findAll();
+
+    List<HashMap<String, String>> findAllUserStatus();
+
+    AppUser modifyRole(long id, String status);
+
 }

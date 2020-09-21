@@ -2,6 +2,7 @@ package com.pczech.taskmanager.controller;
 
 import com.pczech.taskmanager.domain.AppUser;
 import com.pczech.taskmanager.service.AppUserService;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,6 +81,21 @@ public class AppUserController {
     @Secured("ROLE_ADMIN")
     public List<AppUser> findAll() {
         return appUserService.findAll();
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity findAllUserStatus() {
+        return new ResponseEntity(appUserService.findAllUserStatus(), HttpStatus.OK);
+    }
+
+    @PatchMapping("/role/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
+    public void changeStatus(
+            @PathVariable(name = "id") long id,
+            @RequestParam(name = "role") @Length(min = 3, max = 10) String status
+    ) {
+        appUserService.modifyRole(id, status);
     }
 
 }
