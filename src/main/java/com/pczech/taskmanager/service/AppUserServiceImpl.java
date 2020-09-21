@@ -7,6 +7,8 @@ import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.exception.UnauthorizedException;
 import com.pczech.taskmanager.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +38,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true, condition = "#result != null")
     public AppUser register(AppUser appUser, Errors errors, ServletRequest servletRequest) {
         if (!errors.hasErrors()) {
             if (!appUserRepository.existsByUsernameOrEmail(appUser.getUsername(), appUser.getEmail())) {
@@ -73,6 +76,7 @@ public class AppUserServiceImpl implements AppUserService {
 
 
     @Override
+    @CacheEvict(value = "users", allEntries = true, condition = "#result != true")
     public AppUser activateUserByAdmin(long id, String status) {
         activateUserStatusCorrect(status);
         AppUser appUser = appUserRepository.findById(id).orElseThrow(() -> new NotFoundException("user id --- " + id));
@@ -100,6 +104,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public void deleteUserById(long id) {
         if (appUserRepository.existsById(id)) {
             appUserRepository.deleteById(id);
@@ -109,7 +114,9 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    @Cacheable(value = "users")
     public List<AppUser> findAll() {
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         List<AppUser> users = appUserRepository.findAll();
         users.forEach(x -> x.setPassword(""));
         return users;
