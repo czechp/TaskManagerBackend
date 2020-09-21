@@ -4,6 +4,7 @@ import com.pczech.taskmanager.domain.AppUser;
 import org.springframework.validation.Errors;
 
 import javax.servlet.ServletRequest;
+import java.util.List;
 
 public interface AppUserService {
     AppUser register(AppUser appUser, Errors errors, ServletRequest servletRequest);
@@ -19,4 +20,8 @@ public interface AppUserService {
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
+
+    void deleteUserById(long id);
+
+    List<AppUser> findAll();
 }

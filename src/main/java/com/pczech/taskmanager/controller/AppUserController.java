@@ -5,17 +5,22 @@ import com.pczech.taskmanager.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController()
 @RequestMapping("/api/users")
 @CrossOrigin("*")
+@Validated()
 public class AppUserController {
     private final AppUserService appUserService;
 
@@ -45,7 +50,7 @@ public class AppUserController {
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-    @PatchMapping("/activate/{id}")
+    @PatchMapping("/admin/activate/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AppUser activateUserByAdmin(@PathVariable(value = "id") long id,
                                        @RequestParam(value = "status") String status) {
@@ -60,6 +65,21 @@ public class AppUserController {
     @RequestMapping(path = "/email", method = RequestMethod.HEAD)
     public ResponseEntity existsByEmail(@RequestParam(value = "email") String email) {
         return appUserService.existsByEmail(email) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/admin/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured("ROLE_ADMIN")
+    public void deleteUserById(@PathVariable(value = "id") @Min(1) long id,
+                               @RequestBody() @Valid() AppUser appUser, Errors errors) {
+        appUserService.deleteUserById(id);
+    }
+
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
+    public List<AppUser> findAll() {
+        return appUserService.findAll();
     }
 
 }

@@ -7,7 +7,6 @@ import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.exception.UnauthorizedException;
 import com.pczech.taskmanager.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
 import javax.servlet.ServletRequest;
+import java.util.List;
 
 @Service()
 public class AppUserServiceImpl implements AppUserService {
@@ -73,7 +73,6 @@ public class AppUserServiceImpl implements AppUserService {
 
 
     @Override
-    @Secured({"ROLE_ADMIN"})
     public AppUser activateUserByAdmin(long id, String status) {
         activateUserStatusCorrect(status);
         AppUser appUser = appUserRepository.findById(id).orElseThrow(() -> new NotFoundException("user id --- " + id));
@@ -81,7 +80,6 @@ public class AppUserServiceImpl implements AppUserService {
         AppUser result = appUserRepository.save(appUser);
         result.setPassword("");
         return result;
-
     }
 
     @Override
@@ -99,6 +97,22 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public boolean existsByEmail(String email) {
         return appUserRepository.existsByEmail(email);
+    }
+
+    @Override
+    public void deleteUserById(long id) {
+        if (appUserRepository.existsById(id)) {
+            appUserRepository.deleteById(id);
+        } else {
+            throw new NotFoundException("appUser id: " + id);
+        }
+    }
+
+    @Override
+    public List<AppUser> findAll() {
+        List<AppUser> users = appUserRepository.findAll();
+        users.forEach(x -> x.setPassword(""));
+        return users;
     }
 
     //private method section

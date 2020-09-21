@@ -44,12 +44,14 @@ public class AppUser implements UserDetails {
 
     private AppUserRole role;
 
+    @JsonIgnore()
     @OneToMany(mappedBy = "owner",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     private List<TaskSuperClass> tasksOwner = new ArrayList<>();
 
+    @JsonIgnore()
     @ManyToMany(fetch = FetchType.EAGER)
     private List<TaskSuperClass> tasks = new ArrayList<>();
 
