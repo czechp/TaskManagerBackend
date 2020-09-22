@@ -15,7 +15,7 @@ import java.util.Map;
 public class JwtTokenServiceImpl implements JwtTokenService {
     //todo: Implement it as input program paramenetr
     private final String KEY = "123PCZECH123";
-    private final int EXPIRATION_MINUTES = 1;
+    private final int EXPIRATION_MINUTES = 60;
 
     @Override
     public String generateToken(String username) {

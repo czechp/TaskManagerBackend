@@ -33,6 +33,7 @@ public class AppUser implements UserDetails {
     private String username;
 
 
+
     @NotNull(message = "password cannot be null")
     @NotEmpty(message = "password cannot be empty")
     @NotBlank(message = "password cannot be blank")
@@ -58,7 +59,6 @@ public class AppUser implements UserDetails {
     @JsonIgnore()
     private boolean tokenValidation;
 
-    @JsonIgnore()
     private boolean adminApproved;
 
     @JsonIgnore()
@@ -111,7 +111,6 @@ public class AppUser implements UserDetails {
     }
 
     @Override
-    @JsonIgnore()
     public boolean isEnabled() {
         return tokenValidation && adminApproved;
     }
