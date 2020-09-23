@@ -38,7 +38,6 @@ public class AppUserController {
 
     @GetMapping("/activate")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_ADMIN")
     public String activateUserByToken(@RequestParam(value = "token") String token) {
         return appUserService.activateUserByToken(token);
     }
@@ -54,6 +53,7 @@ public class AppUserController {
 
     @PatchMapping("/admin/activate/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
     public AppUser activateUserByAdmin(@PathVariable(value = "id") long id,
                                        @RequestParam(value = "status") String status) {
         return appUserService.activateUserByAdmin(id, status);
