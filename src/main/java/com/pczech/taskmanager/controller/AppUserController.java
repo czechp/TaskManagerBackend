@@ -38,6 +38,7 @@ public class AppUserController {
 
     @GetMapping("/activate")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
     public String activateUserByToken(@RequestParam(value = "token") String token) {
         return appUserService.activateUserByToken(token);
     }
