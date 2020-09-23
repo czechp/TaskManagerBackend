@@ -2,6 +2,7 @@ package com.pczech.taskmanager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pczech.taskmanager.domain.AppUser;
+import com.pczech.taskmanager.domain.AppUserRole;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
 import com.pczech.taskmanager.exception.NotFoundException;
@@ -46,6 +47,7 @@ class AppUserControllerTest {
         this.appUser = AppUser.builder()
                 .username("user")
                 .password("user123")
+                .role(AppUserRole.USER)
                 .email("anyEmail@gmail.com")
                 .build();
         this.objectMapper = new ObjectMapper();
@@ -128,13 +130,15 @@ class AppUserControllerTest {
         //given
         //when
         when(appUserService.login(any())).thenReturn("123321");
+        when(appUserService.getRoleForUser(any())).thenReturn("USER");
         //then
         mockMvc.perform(post(URL + "/login")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(appUser)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.jwt").value("123321"));
+                .andExpect(jsonPath("$.jwt").value("123321"))
+                .andExpect(jsonPath("$.role").value("USER"));
     }
 
     @Test()
@@ -186,7 +190,7 @@ class AppUserControllerTest {
 
     @Test()
     @WithMockUser(roles = "ADMIN")
-    void activateUserByAdmin_userNotExists() throws Exception {
+    void activateUserByAdmin_userNotExistsTest() throws Exception {
         //given
         //when
         doThrow(NotFoundException.class)
@@ -198,6 +202,50 @@ class AppUserControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(appUser)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test()
+    void existsByUsernameTest() throws Exception {
+        //given
+        //when
+        when(appUserService.existsByUsername(anyString())).thenReturn(true);
+        //then
+        mockMvc.perform(head(URL + "/username")
+                .param("username", "user"))
+                .andExpect(status().isOk());
+    }
+
+    @Test()
+    void existByUsername_NotFoundTest() throws Exception {
+        //given
+        //when
+        when(appUserService.existsByUsername(anyString())).thenReturn(false);
+        //then
+        mockMvc.perform(head(URL + "/username")
+                .param("username", "user"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test()
+    void existsByEmailTest() throws Exception {
+        //given
+        //when
+        when(appUserService.existsByEmail(anyString())).thenReturn(true);
+        //then
+        mockMvc.perform(head(URL + "/email")
+                .param("email", "any@gmail.com"))
+                .andExpect(status().isOk());
+    }
+
+    @Test()
+    void existByEmail_NotFoundTest() throws Exception {
+        //given
+        //when
+        when(appUserService.existsByEmail(anyString())).thenReturn(false);
+        //then
+        mockMvc.perform(head(URL + "/email")
+                .param("email", "any@gmail.com"))
                 .andExpect(status().isNotFound());
     }
 }

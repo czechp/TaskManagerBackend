@@ -1,6 +1,7 @@
 package com.pczech.taskmanager.service;
 
 import com.pczech.taskmanager.domain.AppUser;
+import com.pczech.taskmanager.domain.AppUserRole;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
 import com.pczech.taskmanager.exception.NotFoundException;
@@ -50,6 +51,7 @@ class AppUserServiceImplTest {
                 .id(1L)
                 .username("user")
                 .password("user")
+                .role(AppUserRole.USER)
                 .email("anyEmail@gmail.com")
                 .tokenValidation(true)
                 .adminApproved(true)
@@ -160,5 +162,25 @@ class AppUserServiceImplTest {
         //
         assertThrows(NotFoundException.class, ()->appUserService.activateUserByAdmin(id, status));
     }
+
+    @Test()
+    void getRoleForUserTest(){
+        //given
+        //when
+        when(appUserRepository.findByUsername(anyString())).thenReturn(Optional.of(appUser));
+        String result = appUserService.getRoleForUser(appUser);
+        //then
+        assertTrue(result.equals(appUser.getRole().toString()));
+    }
+
+    @Test()
+    void getRoleForUser_userNotExistsTest(){
+        //given
+        //when
+        when(appUserRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        //then
+        assertThrows(NotFoundException.class, ()->appUserService.getRoleForUser(appUser));
+    }
+
 }
 

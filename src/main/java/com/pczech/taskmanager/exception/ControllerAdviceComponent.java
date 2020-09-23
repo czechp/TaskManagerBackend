@@ -1,12 +1,14 @@
 package com.pczech.taskmanager.exception;
 
-import com.pczech.taskmanager.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,8 +36,13 @@ public class ControllerAdviceComponent {
     }
 
     @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity<Object> badRequestExceptionHandler(Exception e, WebRequest webRequest){
+    public ResponseEntity<Object> badRequestExceptionHandler(Exception e, WebRequest webRequest) {
         return new ResponseEntity<>(createBody("Bad request", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ConstraintViolationException.class})
+    public void constraintViolationExceptionHandler(Exception e, ServletWebRequest servletWebRequest) throws IOException {
+        servletWebRequest.getResponse().sendError(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Incorrect data");
     }
 
     private Map<String, String> createBody(String messageTitle, String message) {

@@ -1,7 +1,6 @@
 package com.pczech.taskmanager.service;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +29,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     @Override
     public Map<String, Object> getDataFromToken(String authorizationHeader) {
         Map<String, Object> result = new HashMap<>();
-        try{
+        try {
             String token = authorizationHeader.substring(7);
             Claims body = Jwts.parser()
                     .setSigningKey(KEY)
@@ -38,7 +37,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                     .getBody();
             result.put("username", body.getSubject());
             result.put("expiration", body.getExpiration());
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info("Authorization with incorrect token");
         }
 

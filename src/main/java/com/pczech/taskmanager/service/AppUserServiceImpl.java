@@ -1,19 +1,27 @@
 package com.pczech.taskmanager.service;
 
 import com.pczech.taskmanager.domain.AppUser;
+import com.pczech.taskmanager.domain.AppUserRole;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
 import com.pczech.taskmanager.exception.BadDataException;
 import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.exception.UnauthorizedException;
 import com.pczech.taskmanager.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
 import javax.servlet.ServletRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 @Service()
 public class AppUserServiceImpl implements AppUserService {
@@ -23,7 +31,7 @@ public class AppUserServiceImpl implements AppUserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
 
-
+    //public method section
     @Autowired()
     public AppUserServiceImpl(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, EmailSenderService emailSenderService,
                               AuthenticationManager authenticationManager, JwtTokenService jwtTokenService) {
@@ -35,6 +43,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true, condition = "#result != null")
     public AppUser register(AppUser appUser, Errors errors, ServletRequest servletRequest) {
         if (!errors.hasErrors()) {
             if (!appUserRepository.existsByUsernameOrEmail(appUser.getUsername(), appUser.getEmail())) {
@@ -72,6 +81,7 @@ public class AppUserServiceImpl implements AppUserService {
 
 
     @Override
+    @CacheEvict(value = "users", allEntries = true, condition = "#result != true")
     public AppUser activateUserByAdmin(long id, String status) {
         activateUserStatusCorrect(status);
         AppUser appUser = appUserRepository.findById(id).orElseThrow(() -> new NotFoundException("user id --- " + id));
@@ -79,9 +89,67 @@ public class AppUserServiceImpl implements AppUserService {
         AppUser result = appUserRepository.save(appUser);
         result.setPassword("");
         return result;
-
     }
 
+    @Override
+    public String getRoleForUser(AppUser appUser) {
+        return appUserRepository.findByUsername(appUser.getUsername())
+                .orElseThrow(() -> new NotFoundException("username --- " + appUser.getUsername()))
+                .getRole().toString();
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return appUserRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return appUserRepository.existsByEmail(email);
+    }
+
+    @Override
+    @CacheEvict(value = "users", allEntries = true)
+    public void deleteUserById(long id) {
+        if (appUserRepository.existsById(id)) {
+            appUserRepository.deleteById(id);
+        } else {
+            throw new NotFoundException("appUser id: " + id);
+        }
+    }
+
+    @Override
+    @Cacheable(value = "users")
+    public List<AppUser> findAll() {
+        List<AppUser> users = appUserRepository.findAll();
+        users.forEach(x -> x.setPassword(""));
+        return users;
+    }
+
+    @Override
+    public List<HashMap<String, String>> finaAllUserRoles() {
+        List<HashMap<String, String>> result = new ArrayList<>();
+        Arrays.stream(AppUserRole.values()).forEach(x -> {
+            HashMap<String, String> role = new HashMap<>();
+            role.put("role", x.toString());
+            result.add(role);
+        });
+        return result;
+    }
+
+    @Override
+    @Transactional()
+    @CacheEvict(value = "users", allEntries = true, condition = "#result != null")
+    public AppUser modifyRole(long id, String role) {
+        AppUser appUser = appUserRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("appUser id --- " + id));
+        AppUserRole appUserRole = AppUserRole.getRole(role)
+                .orElseThrow(() -> new NotFoundException("role --- " + role));
+        appUser.setRole(appUserRole);
+        return appUser;
+    }
+
+    //private method section
     private void activateUserStatusCorrect(String status) {
         if (!status.equals("activate") && !status.equals("deactivate"))
             throw new BadDataException("Incorrect status value");
