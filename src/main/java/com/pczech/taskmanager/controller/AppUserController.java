@@ -89,7 +89,7 @@ public class AppUserController {
         return new ResponseEntity(appUserService.finaAllUserRoles(), HttpStatus.OK);
     }
 
-    @PatchMapping("/role/{id}")
+    @PatchMapping("/roles/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
     public void changeStatus(
