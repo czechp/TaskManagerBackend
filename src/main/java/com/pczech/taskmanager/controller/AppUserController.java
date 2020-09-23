@@ -84,9 +84,9 @@ public class AppUserController {
         return appUserService.findAll();
     }
 
-    @GetMapping("/status")
+    @GetMapping("/roles")
     public ResponseEntity findAllUserStatus() {
-        return new ResponseEntity(appUserService.findAllUserStatus(), HttpStatus.OK);
+        return new ResponseEntity(appUserService.finaAllUserRoles(), HttpStatus.OK);
     }
 
     @PatchMapping("/role/{id}")

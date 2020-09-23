@@ -26,7 +26,7 @@ public interface AppUserService {
 
     List<AppUser> findAll();
 
-    List<HashMap<String, String>> findAllUserStatus();
+    List<HashMap<String, String>> finaAllUserRoles();
 
     AppUser modifyRole(long id, String status);
 

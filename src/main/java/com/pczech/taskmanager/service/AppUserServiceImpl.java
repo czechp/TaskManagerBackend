@@ -127,7 +127,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public List<HashMap<String, String>> findAllUserStatus() {
+    public List<HashMap<String, String>> finaAllUserRoles() {
         List<HashMap<String, String>> result = new ArrayList<>();
         Arrays.stream(AppUserRole.values()).forEach(x -> {
             HashMap<String, String> role = new HashMap<>();
