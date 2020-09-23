@@ -69,11 +69,10 @@ public class AppUserController {
         return appUserService.existsByEmail(email) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_ADMIN")
-    public void deleteUserById(@PathVariable(value = "id") @Min(1) long id,
-                               @RequestBody() @Valid() AppUser appUser, Errors errors) {
+    public void deleteUserById(@PathVariable(value = "id") @Min(1) long id){
         appUserService.deleteUserById(id);
     }
 
