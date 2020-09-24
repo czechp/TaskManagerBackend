@@ -6,26 +6,24 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data()
 @NoArgsConstructor()
 @AllArgsConstructor()
-@Entity()
+@MappedSuperclass()
 public class TaskSuperClass {
-    @ManyToMany(mappedBy = "tasks", fetch = FetchType.EAGER)
-    List<AppUser> executors = new ArrayList<>();
+
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String description;
-    @ManyToOne()
-    private AppUser owner;
+
     private LocalDateTime creationDate;
 
-    public TaskSuperClass(String description, AppUser owner) {
-        this.description = description;
-        this.owner = owner;
-    }
+    private LocalDateTime finishDate;
+
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    private TaskStatus taskStatus;
+
 }
