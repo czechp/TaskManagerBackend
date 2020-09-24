@@ -15,9 +15,9 @@ import java.util.HashMap;
 public class HomeController {
 
     @GetMapping()
-    public ResponseEntity getHelloWorld() {
+    public ResponseEntity<Object> getHelloWorld() {
         HashMap<String, String> result = new HashMap<>();
         result.put("message", "It works");
-        return new ResponseEntity(result, HttpStatus.OK);
+        return new ResponseEntity<Object>(result, HttpStatus.OK);
     }
 }

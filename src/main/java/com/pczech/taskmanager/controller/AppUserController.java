@@ -60,12 +60,12 @@ public class AppUserController {
     }
 
     @RequestMapping(path = "/username", method = RequestMethod.HEAD)
-    public ResponseEntity existsByUsername(@RequestParam(value = "username") String username) {
+    public ResponseEntity<Object> existsByUsername(@RequestParam(value = "username") String username) {
         return appUserService.existsByUsername(username) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
     @RequestMapping(path = "/email", method = RequestMethod.HEAD)
-    public ResponseEntity existsByEmail(@RequestParam(value = "email") String email) {
+    public ResponseEntity<Object> existsByEmail(@RequestParam(value = "email") String email) {
         return appUserService.existsByEmail(email) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
@@ -84,8 +84,8 @@ public class AppUserController {
     }
 
     @GetMapping("/roles")
-    public ResponseEntity findAllUserStatus() {
-        return new ResponseEntity(appUserService.finaAllUserRoles(), HttpStatus.OK);
+    public ResponseEntity<Object> findAllUserStatus() {
+        return new ResponseEntity<>(appUserService.finaAllUserRoles(), HttpStatus.OK);
     }
 
     @PatchMapping("/roles/{id}")
