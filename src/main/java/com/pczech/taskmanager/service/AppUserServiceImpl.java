@@ -1,5 +1,6 @@
 package com.pczech.taskmanager.service;
 
+import com.pczech.taskmanager.aspect.annotation.ObjectCreatedAspect;
 import com.pczech.taskmanager.domain.AppUser;
 import com.pczech.taskmanager.domain.AppUserRole;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
