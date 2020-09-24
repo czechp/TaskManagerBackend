@@ -1,5 +1,6 @@
 package com.pczech.taskmanager.service;
 
+import com.pczech.taskmanager.aspect.annotation.ObjectCreatedAspect;
 import com.pczech.taskmanager.domain.MaintenanceWorker;
 import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.repository.MaintenanceWorkerRepository;
@@ -20,6 +21,7 @@ public class MaintenanceWorkerServiceImpl implements MaintenanceWorkerService {
     }
 
     @Override
+    @ObjectCreatedAspect()
     @CacheEvict(cacheNames = "maintenance-workers", allEntries = true, condition = "#result != null")
     public MaintenanceWorker save(MaintenanceWorker maintenanceWorker) {
         return maintenanceWorkerRepository.save(maintenanceWorker);
