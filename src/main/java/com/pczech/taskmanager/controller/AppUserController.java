@@ -72,7 +72,7 @@ public class AppUserController {
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_ADMIN")
-    public void deleteUserById(@PathVariable(value = "id") @Min(1) long id){
+    public void deleteUserById(@PathVariable(value = "id") @Min(1) long id) {
         appUserService.deleteUserById(id);
     }
 

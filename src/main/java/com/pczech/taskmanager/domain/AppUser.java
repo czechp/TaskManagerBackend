@@ -38,7 +38,6 @@ public class AppUser implements UserDetails {
     private String username;
 
 
-
     @NotNull(message = "password cannot be null")
     @NotEmpty(message = "password cannot be empty")
     @NotBlank(message = "password cannot be blank")
