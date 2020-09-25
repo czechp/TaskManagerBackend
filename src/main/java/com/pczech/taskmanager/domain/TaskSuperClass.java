@@ -24,6 +24,6 @@ public class TaskSuperClass {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private TaskStatus taskStatus;
+    private TaskStatus taskStatus = TaskStatus.TODO;
 
 }

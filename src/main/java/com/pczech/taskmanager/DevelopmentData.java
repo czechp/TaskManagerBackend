@@ -2,7 +2,11 @@ package com.pczech.taskmanager;
 
 import com.pczech.taskmanager.domain.AppUser;
 import com.pczech.taskmanager.domain.AppUserRole;
+import com.pczech.taskmanager.domain.MaintenanceTask;
+import com.pczech.taskmanager.domain.MaintenanceWorker;
 import com.pczech.taskmanager.repository.AppUserRepository;
+import com.pczech.taskmanager.repository.MaintenanceTaskRepository;
+import com.pczech.taskmanager.repository.MaintenanceWorkerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -17,18 +21,28 @@ import org.springframework.stereotype.Component;
 public class DevelopmentData {
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MaintenanceTaskRepository maintenanceTaskRepository;
+    private final MaintenanceWorkerRepository maintenanceWorkerRepository;
 
-    @Autowired()
-    public DevelopmentData(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
+    public DevelopmentData(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, MaintenanceTaskRepository maintenanceTaskRepository, MaintenanceWorkerRepository maintenanceWorkerRepository) {
         this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
+        this.maintenanceTaskRepository = maintenanceTaskRepository;
+        this.maintenanceWorkerRepository = maintenanceWorkerRepository;
     }
+
+    @Autowired()
+
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
         log.info("Development mode active");
         createUsers();
+        createMaintenanceWorkers();
+        createMaintenanceTask();
+        log.info("End of development method");
     }
+
 
     private void createUsers() {
         //creating some users
@@ -63,6 +77,33 @@ public class DevelopmentData {
                         .tokenValidation(true)
                         .build()
         );
-        log.info(appUserRepository.findAll().toString());
+    }
+
+    private void createMaintenanceWorkers() {
+        maintenanceWorkerRepository.saveAndFlush(
+                new MaintenanceWorker("Jacek", "Placek")
+        );
+
+        maintenanceWorkerRepository.save(
+                new MaintenanceWorker("Piotr", "Adamczyk")
+        );
+
+        maintenanceWorkerRepository.save(
+                new MaintenanceWorker("Michał", "Wisniewski")
+        );
+
+    }
+
+    private void createMaintenanceTask() {
+        MaintenanceWorker maintenanceWorker1 = maintenanceWorkerRepository.findById(1L).get();
+        MaintenanceWorker maintenanceWorker2 = maintenanceWorkerRepository.findById(2L).get();
+        MaintenanceWorker maintenanceWorker3 = maintenanceWorkerRepository.findById(3L).get();
+        MaintenanceTask maintenanceTask = new MaintenanceTask();
+        maintenanceTask.setMaintenanceWorker(maintenanceWorker1);
+        maintenanceTask.setBreakdownPlace("Linia1");
+        maintenanceTask.setDescription("description1");
+        maintenanceTaskRepository.save(
+                maintenanceTask
+        );
     }
 }
