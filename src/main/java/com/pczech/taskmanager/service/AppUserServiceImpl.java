@@ -45,6 +45,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     @CacheEvict(value = "users", allEntries = true, condition = "#result != null")
+    @ObjectCreatedAspect()
     public AppUser register(AppUser appUser, Errors errors, ServletRequest servletRequest) {
         if (!errors.hasErrors()) {
             if (!appUserRepository.existsByUsernameOrEmail(appUser.getUsername(), appUser.getEmail())) {

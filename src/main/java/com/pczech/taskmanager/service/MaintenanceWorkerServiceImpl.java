@@ -21,8 +21,8 @@ public class MaintenanceWorkerServiceImpl implements MaintenanceWorkerService {
     }
 
     @Override
-    @ObjectCreatedAspect()
     @CacheEvict(cacheNames = "maintenance-workers", allEntries = true, condition = "#result != null")
+    @ObjectCreatedAspect()
     public MaintenanceWorker save(MaintenanceWorker maintenanceWorker) {
         return maintenanceWorkerRepository.save(maintenanceWorker);
     }
