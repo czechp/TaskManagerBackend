@@ -23,7 +23,7 @@ public class DevelopmentData {
     private final PasswordEncoder passwordEncoder;
     private final MaintenanceTaskRepository maintenanceTaskRepository;
     private final MaintenanceWorkerRepository maintenanceWorkerRepository;
-
+    @Autowired()
     public DevelopmentData(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, MaintenanceTaskRepository maintenanceTaskRepository, MaintenanceWorkerRepository maintenanceWorkerRepository) {
         this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
@@ -31,7 +31,6 @@ public class DevelopmentData {
         this.maintenanceWorkerRepository = maintenanceWorkerRepository;
     }
 
-    @Autowired()
 
 
     @EventListener(ApplicationReadyEvent.class)
@@ -80,7 +79,7 @@ public class DevelopmentData {
     }
 
     private void createMaintenanceWorkers() {
-        maintenanceWorkerRepository.saveAndFlush(
+        maintenanceWorkerRepository.save(
                 new MaintenanceWorker("Jacek", "Placek")
         );
 
@@ -102,6 +101,7 @@ public class DevelopmentData {
         maintenanceTask.setMaintenanceWorker(maintenanceWorker1);
         maintenanceTask.setBreakdownPlace("Linia1");
         maintenanceTask.setDescription("description1");
+        maintenanceTask.setRepairMan(appUserRepository.findByUsername("user").get());
         maintenanceTaskRepository.save(
                 maintenanceTask
         );

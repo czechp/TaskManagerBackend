@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
@@ -15,9 +14,12 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor()
 @AllArgsConstructor()
 public class MaintenanceTask extends TaskSuperClass {
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     @NotNull()
     private MaintenanceWorker maintenanceWorker;
+
+    @ManyToOne()
+    private AppUser repairMan;
 
     @NotNull()
     @Length(min = 3, max = 50)
@@ -25,4 +27,11 @@ public class MaintenanceTask extends TaskSuperClass {
 
     private String repairConclusion;
 
+    @Override
+    public String toString() {
+        return "MaintenanceTask{" +
+                "breakdownPlace='" + breakdownPlace + '\'' +
+                ", repairConclusion='" + repairConclusion + '\'' +
+                '}';
+    }
 }

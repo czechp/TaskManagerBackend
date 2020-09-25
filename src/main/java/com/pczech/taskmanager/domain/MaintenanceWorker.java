@@ -40,4 +40,13 @@ public class MaintenanceWorker {
         this.firstName = firstName;
         this.secondName = secondName;
     }
+
+    @Override
+    public String toString() {
+        return "MaintenanceWorker{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                '}';
+    }
 }
