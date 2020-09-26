@@ -4,6 +4,7 @@ import com.pczech.taskmanager.domain.MaintenanceTask;
 import com.pczech.taskmanager.service.MaintenanceTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,10 +36,23 @@ public class MaintenanceTaskController {
         return maintenanceTaskService.findAll();
     }
 
+    @GetMapping("{id}")
+    @ResponseStatus()
+    public MaintenanceTask findById(@PathVariable (value = "id") long id){
+        return maintenanceTaskService.findById(id);
+    }
+
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured({"ROLE_ADMIN", "ROLE_SUPERUSER", "ROLE_DIRECTOR"})
     public void deleteById(@PathVariable(value = "id") @Min(1) long id) {
         maintenanceTaskService.deleteById(id);
+    }
+
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public MaintenanceTask modify(@RequestBody @Valid() MaintenanceTask maintenanceTask, @PathVariable(value = "id") @Min(1) long id){
+        return maintenanceTaskService.modify(maintenanceTask, id);
     }
 
 }
