@@ -70,7 +70,7 @@ public class DevelopmentData {
                 AppUser.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
-                        .email("admin@gmail.com")
+                        .email("webcoderc@gmail.com")
                         .role(AppUserRole.ADMIN)
                         .adminApproved(true)
                         .tokenValidation(true)

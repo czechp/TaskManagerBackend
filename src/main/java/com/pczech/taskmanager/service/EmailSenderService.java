@@ -4,4 +4,6 @@ import javax.servlet.ServletRequest;
 
 public interface EmailSenderService {
     void sendVerificationToken(String token, String email, ServletRequest servletRequest);
+
+    void sendEmailToEverybody(String title, String body);
 }
