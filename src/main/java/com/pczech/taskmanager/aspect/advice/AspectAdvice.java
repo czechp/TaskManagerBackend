@@ -26,10 +26,12 @@ public class AspectAdvice {
             returning = "result")
     public void objectCreated(Object result) {
         webSocketService.sendToGlobalInfo(prepareMessage(result, CrudOperations.CREATE));
-
         if (result instanceof MaintenanceTask)
             sendEmailNewBreakDown(result);
     }
+
+    // todo: implement rest of CRUD methods
+
 
     private Message prepareMessage(Object object, CrudOperations crudOperations) {
         Message message = new Message();

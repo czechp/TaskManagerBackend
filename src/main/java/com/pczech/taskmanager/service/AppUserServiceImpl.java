@@ -1,6 +1,7 @@
 package com.pczech.taskmanager.service;
 
 import com.pczech.taskmanager.aspect.annotation.ObjectCreatedAspect;
+import com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect;
 import com.pczech.taskmanager.domain.AppUser;
 import com.pczech.taskmanager.domain.AppUserRole;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
@@ -112,6 +113,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     @CacheEvict(value = "users", allEntries = true)
+    @ObjectDeletedAspect()
     public void deleteUserById(long id) {
         if (appUserRepository.existsById(id)) {
             appUserRepository.deleteById(id);

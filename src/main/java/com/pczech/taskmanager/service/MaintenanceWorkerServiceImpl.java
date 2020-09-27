@@ -1,6 +1,7 @@
 package com.pczech.taskmanager.service;
 
 import com.pczech.taskmanager.aspect.annotation.ObjectCreatedAspect;
+import com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect;
 import com.pczech.taskmanager.domain.MaintenanceWorker;
 import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.repository.MaintenanceWorkerRepository;
@@ -41,6 +42,7 @@ public class MaintenanceWorkerServiceImpl implements MaintenanceWorkerService {
 
     @Override
     @CacheEvict(cacheNames = "maintenance-workers", allEntries = true)
+    @ObjectDeletedAspect()
     public void deleteById(long workerId) {
         if (maintenanceWorkerRepository.existsById(workerId))
             maintenanceWorkerRepository.deleteById(workerId);
