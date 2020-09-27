@@ -2,6 +2,7 @@ package com.pczech.taskmanager.service;
 
 import com.pczech.taskmanager.aspect.annotation.ObjectCreatedAspect;
 import com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect;
+import com.pczech.taskmanager.aspect.annotation.ObjectModifiedAspect;
 import com.pczech.taskmanager.domain.AppUser;
 import com.pczech.taskmanager.domain.AppUserRole;
 import com.pczech.taskmanager.exception.AlreadyExistsException;
@@ -144,6 +145,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     @Transactional()
     @CacheEvict(value = "users", allEntries = true, condition = "#result != null")
+    @ObjectModifiedAspect()
     public AppUser modifyRole(long id, String role) {
         AppUser appUser = appUserRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("appUser id --- " + id));

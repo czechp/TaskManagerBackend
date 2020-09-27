@@ -42,10 +42,11 @@ public class MaintenanceWorkerController {
     }
 
 
-    @PutMapping()
+    @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MaintenanceWorker modifyMaintenanceWorker(@RequestBody() @Valid() MaintenanceWorker maintenanceWorker) {
-        return maintenanceWorkerService.save(maintenanceWorker);
+    public MaintenanceWorker modifyMaintenanceWorker(@RequestBody() @Valid() MaintenanceWorker maintenanceWorker,
+                                                     @PathVariable(value = "id") @Min(1) long id) {
+        return maintenanceWorkerService.modify(id, maintenanceWorker);
     }
 
     @DeleteMapping("{id}")

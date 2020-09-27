@@ -2,6 +2,7 @@ package com.pczech.taskmanager.service;
 
 import com.pczech.taskmanager.aspect.annotation.ObjectCreatedAspect;
 import com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect;
+import com.pczech.taskmanager.aspect.annotation.ObjectModifiedAspect;
 import com.pczech.taskmanager.domain.MaintenanceTask;
 import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.repository.MaintenanceTaskRepository;
@@ -38,6 +39,7 @@ public class MaintenanceTaskServiceImpl implements MaintenanceTaskService {
     @Override
     @CacheEvict(value = {"users", "maintenance-workers", "maintenance-tasks"}, allEntries = true)
     @Transactional()
+    @ObjectDeletedAspect()
     public void deleteById(long id) {
         MaintenanceTask maintenanceTask = maintenanceTaskRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("maintenance task id --- " + id));
@@ -55,7 +57,7 @@ public class MaintenanceTaskServiceImpl implements MaintenanceTaskService {
 
     @Override
     @CacheEvict(value = {"users", "maintenance-workers", "maintenance-tasks"}, allEntries = true, condition = "#result != null")
-    @ObjectDeletedAspect()
+    @ObjectModifiedAspect()
     public MaintenanceTask modify(MaintenanceTask maintenanceTask, long id) {
         if(maintenanceTaskRepository.existsById(id)){
             maintenanceTask.setId(id);

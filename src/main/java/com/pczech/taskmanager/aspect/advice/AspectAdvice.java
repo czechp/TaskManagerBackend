@@ -3,6 +3,7 @@ package com.pczech.taskmanager.aspect.advice;
 import com.pczech.taskmanager.domain.*;
 import com.pczech.taskmanager.service.EmailSenderService;
 import com.pczech.taskmanager.service.WebSocketService;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,34 @@ public class AspectAdvice {
             sendEmailNewBreakDown(result);
     }
 
-    // todo: implement rest of CRUD methods
+    @AfterReturning("@annotation(com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect)")
+    public void objectDeleted(JoinPoint joinPoint) {
+        String objectName = joinPoint.getTarget().toString().substring(31, joinPoint.getTarget().toString().indexOf("Service"));
+        Message message = Message.builder()
+                .author(getCurrentUser())
+                .content("Usunięto obiekt z kategorii " + getObjectName(objectName))
+                .build();
+        webSocketService.sendToGlobalInfo(message);
+    }
 
+    @AfterReturning(pointcut = "@annotation(com.pczech.taskmanager.aspect.annotation.ObjectModifiedAspect)",
+            returning = "result")
+    public void ObjectModified(Object result) {
+        webSocketService.sendToGlobalInfo(prepareMessage(result, CrudOperations.UPDATE));
+    }
+
+    private String getObjectName(String objectName) {
+        switch (objectName) {
+            case "MaintenanceTask":
+                return "Awaria ";
+            case "MaintenanceWorker":
+                return "Pracownik utrzymania ruchu";
+            case "AppUser":
+                return "Użytkownik systemu";
+            default:
+                return "";
+        }
+    }
 
     private Message prepareMessage(Object object, CrudOperations crudOperations) {
         Message message = new Message();
@@ -42,16 +69,10 @@ public class AspectAdvice {
                 break;
             }
             case UPDATE: {
-                message.setContent("Utworzono zmodyfikowano obiekt " + getObjectName(object));
+                message.setContent("Zmodyfikowano obiekt " + getObjectName(object));
                 break;
             }
-            case READ: {
-                break;
-            }
-            case DELETE: {
-                message.setContent("Usunięto obiekt ");
-                break;
-            }
+
             default:
                 message.setContent("Not found");
                 break;
