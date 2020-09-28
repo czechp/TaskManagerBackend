@@ -15,6 +15,7 @@ import java.util.List;
 @RestController()
 @RequestMapping("/api/maintenance-workers")
 @Validated()
+@CrossOrigin("*")
 public class MaintenanceWorkerController {
     private final MaintenanceWorkerService maintenanceWorkerService;
 
