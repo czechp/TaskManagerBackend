@@ -2,6 +2,7 @@ package com.pczech.taskmanager.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 @ControllerAdvice()
 public class ControllerAdviceComponent {
-    @ExceptionHandler({BadDataException.class})
+    @ExceptionHandler({BadDataException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<Object> badDataExceptionHandler(Exception e, WebRequest request) {
         return new ResponseEntity<>(createBody("Bad data", e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
