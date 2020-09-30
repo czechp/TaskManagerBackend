@@ -25,7 +25,6 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     }
 
     @Override
-    @Async()
     public void sendVerificationToken(String token, String email, ServletRequest servletRequest) {
         String body = "Aby aktywować konto kliknij  w ----> " +
                 createAddress(servletRequest) +
@@ -55,12 +54,11 @@ public class EmailSenderServiceImpl implements EmailSenderService {
                 .collect(Collectors.toList());
     }
 
-    @Async()
     public void sendEmail(String title, String content, String email) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(email);
         simpleMailMessage.setSubject(title);
         simpleMailMessage.setText(content);
-        javaMailSender.send(simpleMailMessage);
+        new Thread(new EmailSenderThread(javaMailSender, simpleMailMessage)).start();
     }
 }
