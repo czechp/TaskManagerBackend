@@ -36,9 +36,18 @@ public class MaintenanceWorker {
     @JsonIgnore()
     private List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
 
+    @Transient()
+    private int breakdownsAmount;
+
+
     public MaintenanceWorker(@NotNull() @NotBlank() @Length(min = 3, max = 20) String firstName, @NotNull() @NotBlank() @Length(min = 3, max = 20) String secondName) {
         this.firstName = firstName;
         this.secondName = secondName;
+    }
+
+    @PostLoad()
+    public void recountBreakdowns(){
+        breakdownsAmount = maintenanceTasks.size();
     }
 
     @Override

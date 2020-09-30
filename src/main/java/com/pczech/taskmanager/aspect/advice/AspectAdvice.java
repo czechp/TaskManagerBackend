@@ -36,7 +36,7 @@ public class AspectAdvice {
         String objectName = joinPoint.getTarget().toString().substring(31, joinPoint.getTarget().toString().indexOf("Service"));
         Message message = Message.builder()
                 .author(getCurrentUser())
-                .content("Usunięto obiekt z kategorii " + getObjectName(objectName))
+                .content("Usunięto obiekt z kategorii - " + getObjectName(objectName))
                 .build();
         webSocketService.sendToGlobalInfo(message);
     }
@@ -90,6 +90,8 @@ public class AspectAdvice {
                     + " "
                     + ((MaintenanceWorker) object).getSecondName()
                     + " - pracownik utrzymania ruchu";
+        else if (object instanceof MaintenanceTask)
+            result = "awaria";
         return result;
     }
 
