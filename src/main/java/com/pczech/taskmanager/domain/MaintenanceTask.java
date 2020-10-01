@@ -25,6 +25,10 @@ public class MaintenanceTask extends TaskSuperClass {
     @Length(min = 3, max = 50)
     private String breakdownPlace;
 
+    @NotNull()
+    @Length(min = 3, max = 50)
+    private String breakdownMachine;
+
     private String repairConclusion;
 
     @Override

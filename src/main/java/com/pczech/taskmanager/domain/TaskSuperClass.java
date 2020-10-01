@@ -22,6 +22,9 @@ public class TaskSuperClass {
 
     private LocalDateTime finishDate;
 
+    @Length(min=3, max = 40)
+    private String title;
+
     private String description;
 
     @Enumerated(EnumType.STRING)
