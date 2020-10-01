@@ -97,13 +97,34 @@ public class DevelopmentData {
         MaintenanceWorker maintenanceWorker1 = maintenanceWorkerRepository.findById(1L).get();
         MaintenanceWorker maintenanceWorker2 = maintenanceWorkerRepository.findById(2L).get();
         MaintenanceWorker maintenanceWorker3 = maintenanceWorkerRepository.findById(3L).get();
-        MaintenanceTask maintenanceTask = new MaintenanceTask();
-        maintenanceTask.setMaintenanceWorker(maintenanceWorker1);
-        maintenanceTask.setBreakdownPlace("Linia1");
-        maintenanceTask.setDescription("description1");
-        maintenanceTask.setRepairMan(appUserRepository.findByUsername("user").get());
+        //task todo
+        MaintenanceTask maintenanceTaskToDo = new MaintenanceTask();
+        maintenanceTaskToDo.setMaintenanceWorker(maintenanceWorker1);
+        maintenanceTaskToDo.setBreakdownPlace("Linia1");
+        maintenanceTaskToDo.setDescription("description1");
+        maintenanceTaskToDo.setRepairMan(appUserRepository.findByUsername("user").get());
         maintenanceTaskRepository.save(
-                maintenanceTask
+                maintenanceTaskToDo
+        );
+        //task in progress
+        MaintenanceTask maintenanceTaskInProgress = new MaintenanceTask();
+        maintenanceTaskInProgress.setMaintenanceWorker(maintenanceWorker2);
+        maintenanceTaskInProgress.setBreakdownPlace("Linia2");
+        maintenanceTaskInProgress.setDescription("description2");
+        maintenanceTaskInProgress.setRepairMan(appUserRepository.findByUsername("superuser").get());
+        maintenanceTaskRepository.save(
+                maintenanceTaskInProgress
+        );
+
+        //task in progress
+        MaintenanceTask maintenanceTaskDone = new MaintenanceTask();
+        maintenanceTaskDone.setMaintenanceWorker(maintenanceWorker3);
+        maintenanceTaskDone.setBreakdownPlace("Linia3");
+        maintenanceTaskDone.setDescription("description3");
+        maintenanceTaskDone.setRepairMan(appUserRepository.findByUsername("admin").get());
+        maintenanceTaskDone.setRepairConclusion("Any conslusion");
+        maintenanceTaskRepository.save(
+                maintenanceTaskDone
         );
     }
 }
