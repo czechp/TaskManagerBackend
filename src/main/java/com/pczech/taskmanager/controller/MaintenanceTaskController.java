@@ -37,7 +37,7 @@ public class MaintenanceTaskController {
     }
 
     @GetMapping("{id}")
-    @ResponseStatus()
+    @ResponseStatus(HttpStatus.OK)
     public MaintenanceTask findById(@PathVariable (value = "id") long id){
         return maintenanceTaskService.findById(id);
     }
