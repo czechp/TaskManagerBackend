@@ -104,6 +104,7 @@ public class DevelopmentData {
         maintenanceTaskToDo.setBreakdownPlace("Linia1");
         maintenanceTaskToDo.setBreakdownMachine("FlowPack");
         maintenanceTaskToDo.setDescription("description1");
+        maintenanceTaskToDo.setRepairConclusion("Jakies podsumowanie1");
         maintenanceTaskToDo.setTaskStatus(TaskStatus.TODO);
         maintenanceTaskToDo.setRepairMan(appUserRepository.findByUsername("user").get());
         maintenanceTaskRepository.save(
@@ -116,6 +117,7 @@ public class DevelopmentData {
         maintenanceTaskInProgress.setBreakdownPlace("Linia2");
         maintenanceTaskInProgress.setBreakdownMachine("L-23");
         maintenanceTaskInProgress.setDescription("description2");
+        maintenanceTaskToDo.setRepairConclusion("Jakies podsumowanie2");
         maintenanceTaskInProgress.setTaskStatus(TaskStatus.IN_PROGRESS);
         maintenanceTaskInProgress.setRepairMan(appUserRepository.findByUsername("superuser").get());
         maintenanceTaskRepository.save(
@@ -129,6 +131,7 @@ public class DevelopmentData {
         maintenanceTaskDone.setBreakdownPlace("Linia3");
         maintenanceTaskDone.setBreakdownMachine("Paczkarka");
         maintenanceTaskDone.setDescription("description3");
+        maintenanceTaskToDo.setRepairConclusion("Jakies podsumowanie3");
         maintenanceTaskDone.setTaskStatus(TaskStatus.DONE);
         maintenanceTaskDone.setRepairMan(appUserRepository.findByUsername("admin").get());
         maintenanceTaskDone.setRepairConclusion("Any conslusion");
