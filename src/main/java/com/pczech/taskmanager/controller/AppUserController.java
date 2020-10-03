@@ -76,17 +76,23 @@ public class AppUserController {
         appUserService.deleteUserById(id);
     }
 
-    @GetMapping()
+    @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_ADMIN")
     public List<AppUser> findAll() {
         return appUserService.findAll();
+    }
+
+    @GetMapping("/username")
+    @ResponseStatus(HttpStatus.OK)
+    public AppUser findByUsername(@RequestParam(name = "username") @Length(min = 4) String username) {
+        return appUserService.findByUsername(username);
     }
 
     @GetMapping("/roles")
     public ResponseEntity<Object> findAllUserStatus() {
         return new ResponseEntity<>(appUserService.finaAllUserRoles(), HttpStatus.OK);
     }
+
 
     @PatchMapping("/roles/{id}")
     @ResponseStatus(HttpStatus.OK)

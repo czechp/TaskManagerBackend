@@ -1,6 +1,6 @@
 package com.pczech.taskmanager.interceptor;
 
-import com.pczech.taskmanager.domain.MaintenanceWorker;
+import com.pczech.taskmanager.domain.TaskStatus;
 import com.pczech.taskmanager.domain.TaskSuperClass;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
@@ -20,7 +20,9 @@ public class HibernateInterceptorComponent extends EmptyInterceptor {
     }
 
 
-    private void taskSuperClassHandlerSave(Object entity){
+
+
+    private void taskSuperClassHandlerSave(Object entity) {
         if (((TaskSuperClass) entity).getCreationDate() == null)
             ((TaskSuperClass) entity).setCreationDate(LocalDateTime.now());
     }

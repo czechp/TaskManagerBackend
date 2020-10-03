@@ -7,7 +7,9 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity(name = "maintenance_tasks")
 @Data()
@@ -37,5 +39,11 @@ public class MaintenanceTask extends TaskSuperClass {
                 "breakdownPlace='" + breakdownPlace + '\'' +
                 ", repairConclusion='" + repairConclusion + '\'' +
                 '}';
+    }
+
+    @PreUpdate()
+    public void setFinishDate(){
+        if(super.getTaskStatus() == TaskStatus.DONE && super.getFinishDate() == null)
+            super.setFinishDate(LocalDateTime.now());
     }
 }

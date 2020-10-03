@@ -155,6 +155,12 @@ public class AppUserServiceImpl implements AppUserService {
         return appUser;
     }
 
+    @Override
+    public AppUser findByUsername(String username) {
+        return appUserRepository.findByUsername(username)
+                .orElseThrow(()-> new NotFoundException("appUser username --- " + username));
+    }
+
     //private method section
     private void activateUserStatusCorrect(String status) {
         if (!status.equals("activate") && !status.equals("deactivate"))
