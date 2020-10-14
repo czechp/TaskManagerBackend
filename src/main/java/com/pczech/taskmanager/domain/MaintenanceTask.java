@@ -3,6 +3,7 @@ package com.pczech.taskmanager.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Data()
 @NoArgsConstructor()
 @AllArgsConstructor()
+@SuperBuilder()
 public class MaintenanceTask extends TaskSuperClass {
     @ManyToOne()
     private MaintenanceWorker maintenanceWorker;

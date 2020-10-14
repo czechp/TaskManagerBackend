@@ -2,6 +2,7 @@ package com.pczech.taskmanager.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -16,6 +17,7 @@ import java.util.List;
 @Data()
 @NoArgsConstructor()
 @AllArgsConstructor()
+@Builder()
 public class MaintenanceWorker {
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
