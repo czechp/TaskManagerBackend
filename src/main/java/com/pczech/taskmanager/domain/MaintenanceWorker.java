@@ -32,7 +32,7 @@ public class MaintenanceWorker {
     @Length(min = 3, max = 20)
     private String secondName;
 
-    @OneToMany(mappedBy = "maintenanceWorker", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "maintenanceWorker", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore()
     private List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
 

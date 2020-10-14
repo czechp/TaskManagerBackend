@@ -53,7 +53,7 @@ public class AppUser implements UserDetails {
     private String token;
 
     @JsonIgnore()
-    @OneToMany(mappedBy = "repairMan", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "repairMan", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
 
     public AppUser() {

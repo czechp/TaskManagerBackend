@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -17,7 +18,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor()
 public class MaintenanceTask extends TaskSuperClass {
     @ManyToOne()
-    @NotNull()
     private MaintenanceWorker maintenanceWorker;
 
     @ManyToOne()
@@ -32,6 +32,14 @@ public class MaintenanceTask extends TaskSuperClass {
     private String breakdownMachine;
 
     private String repairConclusion;
+
+    @PreRemove()
+    public void preRemove() {
+        this.maintenanceWorker.getMaintenanceTasks().remove(this);
+        this.maintenanceWorker = null;
+        this.repairMan.getMaintenanceTasks().remove(this);
+        this.repairMan = null;
+    }
 
     @Override
     public String toString() {
