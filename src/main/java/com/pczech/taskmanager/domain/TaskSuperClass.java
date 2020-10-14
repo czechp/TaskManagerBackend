@@ -22,6 +22,7 @@ public class TaskSuperClass {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @CreationTimestamp()
     private LocalDateTime creationDate;
 
     private LocalDateTime finishDate;
@@ -33,9 +34,6 @@ public class TaskSuperClass {
 
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus = TaskStatus.TODO;
-
-    @CreationTimestamp()
-    private LocalDateTime createDateTime;
 
     @UpdateTimestamp()
     private LocalDateTime updateDateTime;
