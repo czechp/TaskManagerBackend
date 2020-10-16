@@ -36,6 +36,6 @@ public class TaskSuperClass {
     private TaskStatus taskStatus = TaskStatus.TODO;
 
     @UpdateTimestamp()
-    private LocalDateTime updateDateTime;
+    private LocalDateTime updateDate;
 
 }

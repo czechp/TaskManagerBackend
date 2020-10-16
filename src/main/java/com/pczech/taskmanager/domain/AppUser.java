@@ -67,6 +67,12 @@ public class AppUser implements UserDetails {
         this.token = UUID.randomUUID().toString();
     }
 
+    @PreRemove()
+    public void preRemove(){
+        maintenanceTasks.forEach(x->x.setRepairMan(null));
+        maintenanceTasks = null;
+    }
+
     @Override
     @JsonIgnore()
     public Collection<? extends GrantedAuthority> getAuthorities() {

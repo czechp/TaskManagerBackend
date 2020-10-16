@@ -35,13 +35,7 @@ public class MaintenanceTask extends TaskSuperClass {
 
     private String repairConclusion;
 
-    @PreRemove()
-    public void preRemove() {
-        this.maintenanceWorker.getMaintenanceTasks().remove(this);
-        this.maintenanceWorker = null;
-        this.repairMan.getMaintenanceTasks().remove(this);
-        this.repairMan = null;
-    }
+
 
     @Override
     public String toString() {
