@@ -53,7 +53,7 @@ public class AppUser implements UserDetails {
     private String token;
 
     @JsonIgnore()
-    @OneToMany(mappedBy = "repairMan", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "repairMan", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
 
     public AppUser() {
@@ -65,6 +65,12 @@ public class AppUser implements UserDetails {
 
     public void generateToken() {
         this.token = UUID.randomUUID().toString();
+    }
+
+    @PreRemove()
+    public void preRemove(){
+        maintenanceTasks.forEach(x->x.setRepairMan(null));
+        maintenanceTasks = null;
     }
 
     @Override

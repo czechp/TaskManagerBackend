@@ -1,10 +1,9 @@
 package com.pczech.taskmanager.aspect.advice;
 
-import com.pczech.taskmanager.domain.AppUser;
-import com.pczech.taskmanager.domain.CrudOperations;
-import com.pczech.taskmanager.domain.MaintenanceWorker;
-import com.pczech.taskmanager.domain.Message;
+import com.pczech.taskmanager.domain.*;
+import com.pczech.taskmanager.service.EmailSenderService;
 import com.pczech.taskmanager.service.WebSocketService;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +13,51 @@ import org.springframework.stereotype.Component;
 @Aspect()
 @Component()
 public class AspectAdvice {
-    @Autowired()
     private final WebSocketService webSocketService;
+    private final EmailSenderService emailSenderService;
 
     @Autowired()
-    public AspectAdvice(WebSocketService webSocketService) {
+    public AspectAdvice(WebSocketService webSocketService, EmailSenderService emailSenderService) {
         this.webSocketService = webSocketService;
+        this.emailSenderService = emailSenderService;
     }
+
 
     @AfterReturning(pointcut = "@annotation(com.pczech.taskmanager.aspect.annotation.ObjectCreatedAspect)",
             returning = "result")
     public void objectCreated(Object result) {
         webSocketService.sendToGlobalInfo(prepareMessage(result, CrudOperations.CREATE));
+        if (result instanceof MaintenanceTask)
+            sendEmailNewBreakDown(result);
+    }
+
+    @AfterReturning("@annotation(com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect)")
+    public void objectDeleted(JoinPoint joinPoint) {
+        String objectName = joinPoint.getTarget().toString().substring(31, joinPoint.getTarget().toString().indexOf("Service"));
+        Message message = Message.builder()
+                .author(getCurrentUser())
+                .content("Usunięto obiekt z kategorii - " + getObjectName(objectName))
+                .build();
+        webSocketService.sendToGlobalInfo(message);
+    }
+
+    @AfterReturning(pointcut = "@annotation(com.pczech.taskmanager.aspect.annotation.ObjectModifiedAspect)",
+            returning = "result")
+    public void ObjectModified(Object result) {
+        webSocketService.sendToGlobalInfo(prepareMessage(result, CrudOperations.UPDATE));
+    }
+
+    private String getObjectName(String objectName) {
+        switch (objectName) {
+            case "MaintenanceTask":
+                return "Awaria ";
+            case "MaintenanceWorker":
+                return "Pracownik utrzymania ruchu";
+            case "AppUser":
+                return "Użytkownik systemu";
+            default:
+                return "";
+        }
     }
 
     private Message prepareMessage(Object object, CrudOperations crudOperations) {
@@ -34,23 +66,16 @@ public class AspectAdvice {
         switch (crudOperations) {
             case CREATE: {
                 message.setContent("Utworzono obiekt " + getObjectName(object));
-
                 break;
             }
             case UPDATE: {
-                message.setContent("Utworzono zmodyfikowano obiekt " + getObjectName(object));
+                message.setContent("Zmodyfikowano obiekt " + getObjectName(object));
+                break;
+            }
 
-                break;
-            }
-            case READ: {
-                break;
-            }
-            case DELETE: {
-                message.setContent("Usunięto obiekt ");
-                break;
-            }
             default:
                 message.setContent("Not found");
+                break;
         }
         return message;
 
@@ -65,6 +90,8 @@ public class AspectAdvice {
                     + " "
                     + ((MaintenanceWorker) object).getSecondName()
                     + " - pracownik utrzymania ruchu";
+        else if (object instanceof MaintenanceTask)
+            result = "awaria";
         return result;
     }
 
@@ -74,4 +101,23 @@ public class AspectAdvice {
         }
         return "Not found";
     }
+
+    private void sendEmailNewBreakDown(Object object) {
+        MaintenanceTask maintenanceTask = (MaintenanceTask) object;
+        String body = new StringBuilder()
+                .append("Awaria zlecona przez utrzymanie ruchu\n")
+                .append("Zlecający: ")
+                .append(maintenanceTask.getMaintenanceWorker().getFirstName())
+                .append(" ")
+                .append(maintenanceTask.getMaintenanceWorker().getSecondName())
+                .append("\n")
+                .append("Miejsce awarii: ")
+                .append(maintenanceTask.getBreakdownPlace())
+                .append("\n")
+                .append("Opis awari: ")
+                .append(maintenanceTask.getDescription())
+                .toString();
+        emailSenderService.sendEmailToEverybody("Awaria utrzymania ruchu - " + maintenanceTask.getBreakdownPlace(), body);
+    }
+
 }

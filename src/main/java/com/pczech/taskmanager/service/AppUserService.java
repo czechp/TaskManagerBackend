@@ -30,4 +30,5 @@ public interface AppUserService {
 
     AppUser modifyRole(long id, String status);
 
+    AppUser findByUsername(String username);
 }

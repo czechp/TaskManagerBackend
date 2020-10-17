@@ -1,9 +1,6 @@
 package com.pczech.taskmanager;
 
-import com.pczech.taskmanager.domain.AppUser;
-import com.pczech.taskmanager.domain.AppUserRole;
-import com.pczech.taskmanager.domain.MaintenanceTask;
-import com.pczech.taskmanager.domain.MaintenanceWorker;
+import com.pczech.taskmanager.domain.*;
 import com.pczech.taskmanager.repository.AppUserRepository;
 import com.pczech.taskmanager.repository.MaintenanceTaskRepository;
 import com.pczech.taskmanager.repository.MaintenanceWorkerRepository;
@@ -12,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.config.Task;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component()
 @Slf4j()
@@ -70,7 +70,7 @@ public class DevelopmentData {
                 AppUser.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
-                        .email("admin@gmail.com")
+                        .email("webcoderc@gmail.com")
                         .role(AppUserRole.ADMIN)
                         .adminApproved(true)
                         .tokenValidation(true)
@@ -97,13 +97,47 @@ public class DevelopmentData {
         MaintenanceWorker maintenanceWorker1 = maintenanceWorkerRepository.findById(1L).get();
         MaintenanceWorker maintenanceWorker2 = maintenanceWorkerRepository.findById(2L).get();
         MaintenanceWorker maintenanceWorker3 = maintenanceWorkerRepository.findById(3L).get();
-        MaintenanceTask maintenanceTask = new MaintenanceTask();
-        maintenanceTask.setMaintenanceWorker(maintenanceWorker1);
-        maintenanceTask.setBreakdownPlace("Linia1");
-        maintenanceTask.setDescription("description1");
-        maintenanceTask.setRepairMan(appUserRepository.findByUsername("user").get());
+        //task todo
+        MaintenanceTask maintenanceTaskToDo = new MaintenanceTask();
+        maintenanceTaskToDo.setTitle("Awaria 1");
+        maintenanceTaskToDo.setMaintenanceWorker(maintenanceWorker1);
+        maintenanceTaskToDo.setBreakdownPlace("Linia1");
+        maintenanceTaskToDo.setBreakdownMachine("FlowPack");
+        maintenanceTaskToDo.setDescription("description1");
+        maintenanceTaskToDo.setRepairConclusion("Jakies podsumowanie1");
+        maintenanceTaskToDo.setTaskStatus(TaskStatus.TODO);
+        maintenanceTaskToDo.setRepairMan(appUserRepository.findByUsername("user").get());
         maintenanceTaskRepository.save(
-                maintenanceTask
+                maintenanceTaskToDo
+        );
+        //task in progress
+        MaintenanceTask maintenanceTaskInProgress = new MaintenanceTask();
+        maintenanceTaskInProgress.setTitle("Awaria 2");
+        maintenanceTaskInProgress.setMaintenanceWorker(maintenanceWorker2);
+        maintenanceTaskInProgress.setBreakdownPlace("Linia2");
+        maintenanceTaskInProgress.setBreakdownMachine("L-23");
+        maintenanceTaskInProgress.setDescription("description2");
+        maintenanceTaskToDo.setRepairConclusion("Jakies podsumowanie2");
+        maintenanceTaskInProgress.setTaskStatus(TaskStatus.IN_PROGRESS);
+        maintenanceTaskInProgress.setRepairMan(appUserRepository.findByUsername("superuser").get());
+        maintenanceTaskRepository.save(
+                maintenanceTaskInProgress
+        );
+
+        //task in progress
+        MaintenanceTask maintenanceTaskDone = new MaintenanceTask();
+        maintenanceTaskDone.setTitle("Awaria 3");
+        maintenanceTaskDone.setMaintenanceWorker(maintenanceWorker3);
+        maintenanceTaskDone.setBreakdownPlace("Linia3");
+        maintenanceTaskDone.setBreakdownMachine("Paczkarka");
+        maintenanceTaskDone.setDescription("description3");
+        maintenanceTaskToDo.setRepairConclusion("Jakies podsumowanie3");
+        maintenanceTaskDone.setTaskStatus(TaskStatus.DONE);
+        maintenanceTaskDone.setRepairMan(appUserRepository.findByUsername("admin").get());
+        maintenanceTaskDone.setRepairConclusion("Any conslusion");
+        maintenanceTaskDone.setFinishDate(LocalDateTime.now());
+        maintenanceTaskRepository.save(
+                maintenanceTaskDone
         );
     }
 }

@@ -12,4 +12,6 @@ public interface MaintenanceWorkerService {
     MaintenanceWorker findById(long workerId);
 
     void deleteById(long workerId);
+
+    MaintenanceWorker modify(long id, MaintenanceWorker maintenanceWorker);
 }

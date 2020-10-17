@@ -2,6 +2,7 @@ package com.pczech.taskmanager.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -16,6 +17,7 @@ import java.util.List;
 @Data()
 @NoArgsConstructor()
 @AllArgsConstructor()
+@Builder()
 public class MaintenanceWorker {
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,13 +34,28 @@ public class MaintenanceWorker {
     @Length(min = 3, max = 20)
     private String secondName;
 
-    @OneToMany(mappedBy = "maintenanceWorker", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "maintenanceWorker", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore()
     private List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
+
+    @Transient()
+    private int breakdownsAmount;
+
+    @PreRemove()
+    public void preRemove(){
+        maintenanceTasks.stream().forEach(x-> x.setMaintenanceWorker(null));
+        maintenanceTasks = null;
+    }
+
 
     public MaintenanceWorker(@NotNull() @NotBlank() @Length(min = 3, max = 20) String firstName, @NotNull() @NotBlank() @Length(min = 3, max = 20) String secondName) {
         this.firstName = firstName;
         this.secondName = secondName;
+    }
+
+    @PostLoad()
+    public void recountBreakdowns(){
+        breakdownsAmount = maintenanceTasks.size();
     }
 
     @Override
