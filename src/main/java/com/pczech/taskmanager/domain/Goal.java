@@ -1,15 +1,14 @@
 package com.pczech.taskmanager.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -20,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @Builder()
 public class Goal {
     @Id()
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull()
@@ -28,4 +27,14 @@ public class Goal {
     @Length(min = 5, max = 30)
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore()
+    private Task task;
+
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hcb = new HashCodeBuilder();
+        hcb.append(content);
+        return hcb.toHashCode();
+    }
 }

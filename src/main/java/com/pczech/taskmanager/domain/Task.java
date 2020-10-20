@@ -4,12 +4,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.*;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity(name = "tasks")
 @Data()
 @NoArgsConstructor()
@@ -24,6 +25,8 @@ public class Task extends TaskSuperClass {
     @NotNull()
     private TaskPriority taskPriority;
 
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Goal> goals = new LinkedHashSet<>();
 
     //todo: Add @ManyToMany with app user
 
@@ -35,5 +38,19 @@ public class Task extends TaskSuperClass {
     @PostLoad()
     public void postLoad() {
         //todo: implement recounting progress
+    }
+
+
+
+    public void addGoal(Goal goal) {
+        this.goals.add(goal);
+        goal.setTask(this);
+    }
+
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hcb = new HashCodeBuilder();
+        hcb.append(super.getTitle());
+        return hcb.toHashCode();
     }
 }

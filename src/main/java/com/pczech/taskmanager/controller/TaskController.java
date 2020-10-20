@@ -1,7 +1,9 @@
 package com.pczech.taskmanager.controller;
 
+import com.pczech.taskmanager.domain.Goal;
 import com.pczech.taskmanager.domain.Task;
 import com.pczech.taskmanager.domain.TaskStatus;
+import com.pczech.taskmanager.repository.GoalRepository;
 import com.pczech.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import java.util.*;
 @Validated()
 public class TaskController {
     private TaskService taskService;
+
 
     @Autowired()
     public TaskController(TaskService taskService) {
@@ -54,6 +57,12 @@ public class TaskController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable(name = "id") @Min(1L) long id){
         taskService.delete(id);
+    }
+
+    @PostMapping("/{taskId}/goals")
+    public Task addGoal(@PathVariable(value = "taskId") @Min(1L) long taskId,
+                        @RequestBody() Goal goal){
+        return taskService.addGoal(taskId, goal);
     }
 
 
