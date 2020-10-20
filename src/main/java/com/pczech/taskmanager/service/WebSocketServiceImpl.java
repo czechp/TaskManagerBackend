@@ -3,14 +3,13 @@ package com.pczech.taskmanager.service;
 import com.pczech.taskmanager.domain.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service()
 public class WebSocketServiceImpl implements WebSocketService {
 
-    private SimpMessagingTemplate template;
+    private final SimpMessagingTemplate template;
 
     @Autowired()
     public WebSocketServiceImpl(SimpMessagingTemplate template) {

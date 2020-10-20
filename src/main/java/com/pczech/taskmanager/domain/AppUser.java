@@ -68,8 +68,8 @@ public class AppUser implements UserDetails {
     }
 
     @PreRemove()
-    public void preRemove(){
-        maintenanceTasks.forEach(x->x.setRepairMan(null));
+    public void preRemove() {
+        maintenanceTasks.forEach(x -> x.setRepairMan(null));
         maintenanceTasks = null;
     }
 

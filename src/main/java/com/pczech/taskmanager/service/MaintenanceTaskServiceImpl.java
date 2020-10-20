@@ -52,17 +52,17 @@ public class MaintenanceTaskServiceImpl implements MaintenanceTaskService {
     @Override
     public MaintenanceTask findById(long id) {
         return maintenanceTaskRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException("maintenance id --- " + id));
+                .orElseThrow(() -> new NotFoundException("maintenance id --- " + id));
     }
 
     @Override
     @CacheEvict(value = {"users", "maintenance-workers", "maintenance-tasks"}, allEntries = true, condition = "#result != null")
     @ObjectModifiedAspect()
     public MaintenanceTask modify(MaintenanceTask maintenanceTask, long id) {
-        if(maintenanceTaskRepository.existsById(id)){
+        if (maintenanceTaskRepository.existsById(id)) {
             maintenanceTask.setId(id);
             return maintenanceTaskRepository.save(maintenanceTask);
-        }else
+        } else
             throw new NotFoundException("maintenance task id --- " + id);
     }
 }

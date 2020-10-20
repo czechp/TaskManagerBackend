@@ -4,8 +4,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 public class EmailSenderThread implements Runnable {
-    private JavaMailSender javaMailSender;
-    private SimpleMailMessage simpleMailMessage;
+    private final JavaMailSender javaMailSender;
+    private final SimpleMailMessage simpleMailMessage;
 
     public EmailSenderThread(JavaMailSender javaMailSender, SimpleMailMessage simpleMailMessage) {
         this.javaMailSender = javaMailSender;

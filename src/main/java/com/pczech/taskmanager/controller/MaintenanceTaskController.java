@@ -17,7 +17,7 @@ import java.util.List;
 @Validated()
 @CrossOrigin("*")
 public class MaintenanceTaskController {
-    private MaintenanceTaskService maintenanceTaskService;
+    private final MaintenanceTaskService maintenanceTaskService;
 
     @Autowired()
     public MaintenanceTaskController(MaintenanceTaskService maintenanceTaskService) {
@@ -38,7 +38,7 @@ public class MaintenanceTaskController {
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MaintenanceTask findById(@PathVariable (value = "id") long id){
+    public MaintenanceTask findById(@PathVariable(value = "id") long id) {
         return maintenanceTaskService.findById(id);
     }
 
@@ -51,7 +51,7 @@ public class MaintenanceTaskController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MaintenanceTask modify(@RequestBody @Valid() MaintenanceTask maintenanceTask, @PathVariable(value = "id") @Min(1) long id){
+    public MaintenanceTask modify(@RequestBody @Valid() MaintenanceTask maintenanceTask, @PathVariable(value = "id") @Min(1) long id) {
         return maintenanceTaskService.modify(maintenanceTask, id);
     }
 

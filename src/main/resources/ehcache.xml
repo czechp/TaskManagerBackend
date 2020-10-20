@@ -3,6 +3,8 @@
     <cache alias="users" uses-template="default"></cache>
     <cache alias="maintenance-workers" uses-template="default"></cache>
     <cache alias="maintenance-tasks" uses-template="default"></cache>
+    <cache alias="tasks" uses-template="default"></cache>
+
     <cache-template name="default">
         <expiry>
             <ttl unit="minutes">10</ttl>

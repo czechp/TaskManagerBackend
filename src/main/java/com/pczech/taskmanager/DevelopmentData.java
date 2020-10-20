@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.config.Task;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +22,7 @@ public class DevelopmentData {
     private final PasswordEncoder passwordEncoder;
     private final MaintenanceTaskRepository maintenanceTaskRepository;
     private final MaintenanceWorkerRepository maintenanceWorkerRepository;
+
     @Autowired()
     public DevelopmentData(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, MaintenanceTaskRepository maintenanceTaskRepository, MaintenanceWorkerRepository maintenanceWorkerRepository) {
         this.appUserRepository = appUserRepository;
@@ -30,7 +30,6 @@ public class DevelopmentData {
         this.maintenanceTaskRepository = maintenanceTaskRepository;
         this.maintenanceWorkerRepository = maintenanceWorkerRepository;
     }
-
 
 
     @EventListener(ApplicationReadyEvent.class)

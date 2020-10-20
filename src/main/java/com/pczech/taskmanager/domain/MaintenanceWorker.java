@@ -41,20 +41,19 @@ public class MaintenanceWorker {
     @Transient()
     private int breakdownsAmount;
 
-    @PreRemove()
-    public void preRemove(){
-        maintenanceTasks.stream().forEach(x-> x.setMaintenanceWorker(null));
-        maintenanceTasks = null;
-    }
-
-
     public MaintenanceWorker(@NotNull() @NotBlank() @Length(min = 3, max = 20) String firstName, @NotNull() @NotBlank() @Length(min = 3, max = 20) String secondName) {
         this.firstName = firstName;
         this.secondName = secondName;
     }
 
+    @PreRemove()
+    public void preRemove() {
+        maintenanceTasks.stream().forEach(x -> x.setMaintenanceWorker(null));
+        maintenanceTasks = null;
+    }
+
     @PostLoad()
-    public void recountBreakdowns(){
+    public void recountBreakdowns() {
         breakdownsAmount = maintenanceTasks.size();
     }
 

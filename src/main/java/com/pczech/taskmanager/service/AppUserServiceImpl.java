@@ -158,7 +158,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUser findByUsername(String username) {
         return appUserRepository.findByUsername(username)
-                .orElseThrow(()-> new NotFoundException("appUser username --- " + username));
+                .orElseThrow(() -> new NotFoundException("appUser username --- " + username));
     }
 
     //private method section

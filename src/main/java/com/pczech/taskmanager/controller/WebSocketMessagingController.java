@@ -5,12 +5,11 @@ import com.pczech.taskmanager.service.WebSocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 @Controller()
 public class WebSocketMessagingController {
-    private WebSocketService webSocketService;
+    private final WebSocketService webSocketService;
 
     @Autowired()
     public WebSocketMessagingController(WebSocketService webSocketService) {

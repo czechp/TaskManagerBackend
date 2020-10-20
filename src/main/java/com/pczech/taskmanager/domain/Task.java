@@ -19,15 +19,14 @@ public class Task extends TaskSuperClass {
     private int progress;
 
     @Enumerated(EnumType.STRING)
-    private TaskPriority taskPriority=TaskPriority.LOW;
+    private TaskPriority taskPriority = TaskPriority.LOW;
 
-    @OneToMany(mappedBy = "task", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Set<Goal> goals = new HashSet<>();
+
 
     //todo: Add @ManyToMany with app user
 
     @PostLoad()
-    public void postLoad(){
+    public void postLoad() {
         //todo: implement recounting progress
     }
 }
