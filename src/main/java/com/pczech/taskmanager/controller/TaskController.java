@@ -24,8 +24,14 @@ public class TaskController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Task save(@RequestBody @Valid Task task){
+    public Task save(@RequestBody @Valid Task task) {
         return taskService.save(task);
+    }
+
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public List<Task> findAll() {
+        return taskService.findAll();
     }
 
     @GetMapping("/status")

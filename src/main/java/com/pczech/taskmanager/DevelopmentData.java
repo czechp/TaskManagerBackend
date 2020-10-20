@@ -4,8 +4,8 @@ import com.pczech.taskmanager.domain.*;
 import com.pczech.taskmanager.repository.AppUserRepository;
 import com.pczech.taskmanager.repository.MaintenanceTaskRepository;
 import com.pczech.taskmanager.repository.MaintenanceWorkerRepository;
+import com.pczech.taskmanager.repository.TaskRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Component()
 @Slf4j()
@@ -22,15 +23,15 @@ public class DevelopmentData {
     private final PasswordEncoder passwordEncoder;
     private final MaintenanceTaskRepository maintenanceTaskRepository;
     private final MaintenanceWorkerRepository maintenanceWorkerRepository;
+    private final TaskRepository taskRepository;
 
-    @Autowired()
-    public DevelopmentData(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, MaintenanceTaskRepository maintenanceTaskRepository, MaintenanceWorkerRepository maintenanceWorkerRepository) {
+    public DevelopmentData(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, MaintenanceTaskRepository maintenanceTaskRepository, MaintenanceWorkerRepository maintenanceWorkerRepository, TaskRepository taskRepository) {
         this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.maintenanceTaskRepository = maintenanceTaskRepository;
         this.maintenanceWorkerRepository = maintenanceWorkerRepository;
+        this.taskRepository = taskRepository;
     }
-
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
@@ -38,6 +39,7 @@ public class DevelopmentData {
         createUsers();
         createMaintenanceWorkers();
         createMaintenanceTask();
+        createTask();
         log.info("End of development method");
     }
 
@@ -138,5 +140,29 @@ public class DevelopmentData {
         maintenanceTaskRepository.save(
                 maintenanceTaskDone
         );
+    }
+
+    public void createTask() {
+        Task task1 = Task.builder()
+                .finishDate(LocalDateTime.now())
+                .title("task1")
+                .description("description task1")
+                .taskPriority(TaskPriority.LOW)
+                .build();
+
+        Task task2 = Task.builder()
+                .finishDate(LocalDateTime.now())
+                .title("task2")
+                .description("description task1")
+                .taskPriority(TaskPriority.MEDIUM)
+                .build();
+
+        Task task3 = Task.builder()
+                .finishDate(LocalDateTime.now())
+                .title("task3")
+                .description("description task3")
+                .taskPriority(TaskPriority.HIGH)
+                .build();
+        taskRepository.saveAll(Arrays.asList(task1, task2, task3));
     }
 }

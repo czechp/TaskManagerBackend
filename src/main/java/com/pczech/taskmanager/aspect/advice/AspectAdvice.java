@@ -55,6 +55,8 @@ public class AspectAdvice {
                 return "Pracownik utrzymania ruchu";
             case "AppUser":
                 return "Użytkownik systemu";
+            case "Task":
+                return "Praca do wykonania";
             default:
                 return "";
         }
@@ -92,6 +94,8 @@ public class AspectAdvice {
                     + " - pracownik utrzymania ruchu";
         else if (object instanceof MaintenanceTask)
             result = "awaria";
+        else if (object instanceof Task)
+            result = "praca do wykonania";
         return result;
     }
 
