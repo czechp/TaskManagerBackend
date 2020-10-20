@@ -6,14 +6,17 @@ import com.pczech.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.*;
 
 @RestController()
 @RequestMapping("/api/tasks")
 @CrossOrigin("*")
+@Validated()
 public class TaskController {
     private TaskService taskService;
 
@@ -33,6 +36,29 @@ public class TaskController {
     public List<Task> findAll() {
         return taskService.findAll();
     }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Task findById(@PathVariable(name = "id") @Min(1L) long id){
+        return taskService.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Task modify(@PathVariable(name = "id") @Min(1L) long id,
+                       @RequestBody() @Valid() Task task ){
+        return taskService.modify(id, task);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable(name = "id") @Min(1L) long id){
+        taskService.delete(id);
+    }
+
+
+
+
 
     @GetMapping("/status")
     public ResponseEntity<Object> getStatus() {

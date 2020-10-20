@@ -22,7 +22,7 @@ public class Task extends TaskSuperClass {
 
     @Enumerated(EnumType.STRING)
     @NotNull()
-    private TaskPriority taskPriority = TaskPriority.LOW;
+    private TaskPriority taskPriority;
 
 
     //todo: Add @ManyToMany with app user

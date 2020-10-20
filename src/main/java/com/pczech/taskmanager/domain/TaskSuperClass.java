@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data()
@@ -28,6 +29,7 @@ public class TaskSuperClass {
     private LocalDateTime finishDate;
 
     @Length(min = 3, max = 40)
+    @NotNull()
     private String title;
 
     private String description;
