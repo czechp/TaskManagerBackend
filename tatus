@@ -1,0 +1,75 @@
+[33m27b2097[m[33m ([m[1;36mHEAD -> [m[1;32mTask[m[33m, [m[1;31morigin/Task[m[33m)[m Endpoint to add goal to existence task
+[33mc7f88d6[m Simple CRUD for Task entity
+[33m7f65366[m Fill DevelopmentData and implement find all endpoint
+[33mf72ed50[m[33m ([m[1;32mmaster[m[33m)[m Reformat code and create service for Task entity
+[33mc8f9254[m Prototype TASK class
+[33m7ae85ef[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'MaintenanceTask'
+[33m693d679[m[33m ([m[1;31morigin/MaintenanceTask[m[33m, [m[1;32mMaintenanceTask[m[33m)[m Improve associatitions between entities
+[33ma81d599[m Bootstrap creation and update date
+[33m2d9a563[m Add builders to entities
+[33me39caaa[m Clean up JPA associations
+[33m6e9e68f[m Getting user by username
+[33m2cf1dc9[m Change minimum length of breakdown place
+[33mf802c6d[m Add repair conclusion to test data
+[33me0be7d7[m Correct response status for find by id endpoint
+[33m12228e9[m Adding additional maintenance tasks for testing and field to contain breakdown machine and title:
+[33m15e1b50[m Add additional task to frontend test
+[33mc23ef1b[m Recounting amount of breakdowns per worker
+[33maa1b7ac[m Reimplementing multi threading during email sending
+[33mb626a57[m Add PUT to allow methods in Acces-Control-Allow-Methods header and move  MethodArgumentValidException to UNPORCESSABLE_ENTITY response
+[33me38006e[m Allow access OPTION method to all endpoints
+[33m25735b0[m Finished making messaging to rest services
+[33m7e4efff[m Add annotations to delete methods in service implementation
+[33m1ab6420[m Sending email after creating new maintenance task
+[33m8ddb2e1[m MainTask CRUD
+[33m23dd056[m Correct and understand relates between entities
+[33m6af78d3[m Start implementing MaintenanceTask
+[33mb38219e[m[33m ([m[1;31morigin/MaintenceTask[m[33m, [m[1;32mMaintenceTask[m[33m)[m Customize aspect to sending message by websocket to frontend
+[33m2709346[m Created service to sending message to subscribed clients by WebSocket
+[33m0af19d3[m Implementing simple WebSocket connection with frontend
+[33mfc2d786[m WebSocket configuration
+[33m91c91f4[m Merge branch 'PreparingAspectAndMessaging' into MaintenceTask
+[33m529d9bb[m[33m ([m[1;31morigin/PreparingAspectAndMessaging[m[33m, [m[1;32mPreparingAspectAndMessaging[m[33m)[m Implements simple aspect component
+[33m90b3ed5[m Add generic to response entity
+[33m6911c40[m Caching MaintenanceWorker service
+[33m89b10a5[m Create new MaintenanceWorker
+[33m9fbafd8[m MaintenanceWorker class and repository
+[33m6d22548[m[33m ([m[1;31morigin/TaskSuperClass[m[33m)[m Merge branch 'TaskSuperClass'
+[33m4efcfaf[m Correct delete user endpoint structure
+[33mbea5c8e[m Use plurarl verbs to determine endpoint to  change user role
+[33m3ec0ab2[m Change wrong named method
+[33me6b6f08[m Add PATCH method to header Access-Control-Allow-Methods
+[33m0c4b261[m Mistake during select method to secure
+[33m49e0419[m Activate user only by admin
+[33mba46a67[m Share more info about user
+[33mfe2b472[m Resolve problem with CORS response status 0
+[33m0fcf8f1[m Change expiration jwt token for tests
+[33m99b3f16[m Change user role
+[33me64b167[m Enable caching
+[33ma2cc43e[m Getting users only by admin
+[33m14810b1[m Endpoints to checking existence user by username and email
+[33me78428a[m Reformat code
+[33md3fb1df[m Added method to getting role for user during login
+[33m4c0c008[m Prepare super class for Tasks and CurrentTask
+[33m7e51c6c[m Merge branch 'Authorization'
+[33m63789bd[m[33m ([m[1;31morigin/Authorization[m[33m, [m[1;32mAuthorization[m[33m)[m Resolve problem with Hamcrest dependencies
+[33me427deb[m Optimize imports and reformat code
+[33ma14b592[m Hide password when admin getting response with AppUser data after changing his status
+[33m20a4731[m Active user by admin
+[33m2891eee[m Activate user by admin
+[33mcbdd000[m Starting implementation authentication by JwtToken
+[33m479f4dc[m Starting implementation authentication by JwtToken
+[33mde60702[m Login endpoint to create and sending JWT token to client
+[33mdf81e0f[m Implemented UserDetailsServiceImpl.java
+[33md87f5dc[m Activate user by token getting on email address
+[33mc33d0c1[m Hide confidential data as program parameters
+[33m6bb46cb[m Refactor class for development testing
+[33me8538f0[m Sending email when new user is registering and test for AppUserService.register
+[33m0930731[m Created few users for development needed
+[33m7ed2c4b[m Correct implementation AppUser entity
+[33m3eef496[m Implemented simply service to sending email
+[33m5f46769[m Basic security configuration
+[33md6209c8[m register method in AppUserService.java and test for it
+[33m211aab8[m AppUser model
+[33m1f75513[m Bean for password encoder
+[33m1d208b2[m Initial commit

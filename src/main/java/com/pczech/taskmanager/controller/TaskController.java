@@ -66,9 +66,6 @@ public class TaskController {
     }
 
 
-
-
-
     @GetMapping("/status")
     public ResponseEntity<Object> getStatus() {
         List<Map<String, String>> body = new ArrayList<>();
