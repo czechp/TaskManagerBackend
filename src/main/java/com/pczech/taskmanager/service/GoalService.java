@@ -6,4 +6,5 @@ public interface GoalService {
 
     Goal modify(long id, Goal goal);
 
+    void deleteById(long id);
 }

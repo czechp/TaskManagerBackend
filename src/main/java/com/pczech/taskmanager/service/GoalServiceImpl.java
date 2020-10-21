@@ -1,5 +1,6 @@
 package com.pczech.taskmanager.service;
 
+import com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect;
 import com.pczech.taskmanager.aspect.annotation.ObjectModifiedAspect;
 import com.pczech.taskmanager.domain.Goal;
 import com.pczech.taskmanager.exception.NotFoundException;
@@ -30,5 +31,15 @@ public class GoalServiceImpl implements GoalService {
         }else {
             throw new NotFoundException("goal id --- " + id);
         }
+    }
+
+    @Override
+    @CacheEvict(value = {"tasks"}, allEntries = true)
+    @ObjectDeletedAspect()
+    public void deleteById(long id) {
+        if(goalRepository.existsById(id))
+            goalRepository.deleteById(id);
+        else
+            throw new NotFoundException("goal id --- " + id);
     }
 }

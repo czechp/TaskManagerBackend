@@ -29,4 +29,10 @@ public class GoalController {
                        @RequestBody() Goal goal){
         return goalService.modify(id, goal);
     }
+
+    @DeleteMapping("/{goalId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable(name = "goalId") @Min(1L) long id){
+        goalService.deleteById(id);
+    }
 }
