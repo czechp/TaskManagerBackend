@@ -28,6 +28,9 @@ public class Task extends TaskSuperClass {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Goal> goals = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SubTask> subTasks = new LinkedHashSet<>();
+
     //todo: Add @ManyToMany with app user
 
     @PrePersist()
@@ -52,5 +55,10 @@ public class Task extends TaskSuperClass {
         HashCodeBuilder hcb = new HashCodeBuilder();
         hcb.append(super.getTitle());
         return hcb.toHashCode();
+    }
+
+    public void addSubTask(SubTask subTask) {
+        this.subTasks.add(subTask);
+        subTask.setTask(this);
     }
 }

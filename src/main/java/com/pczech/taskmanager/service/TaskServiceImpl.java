@@ -4,6 +4,7 @@ import com.pczech.taskmanager.aspect.annotation.ObjectCreatedAspect;
 import com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect;
 import com.pczech.taskmanager.aspect.annotation.ObjectModifiedAspect;
 import com.pczech.taskmanager.domain.Goal;
+import com.pczech.taskmanager.domain.SubTask;
 import com.pczech.taskmanager.domain.Task;
 import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.repository.TaskRepository;
@@ -59,7 +60,7 @@ public class TaskServiceImpl implements TaskService {
     @CacheEvict(value = "tasks", allEntries = true)
     @ObjectDeletedAspect()
     public void delete(long id) {
-        if(taskRepository.existsById(id))
+        if (taskRepository.existsById(id))
             taskRepository.deleteById(id);
         else
             throw new NotFoundException("task id --- " + id);
@@ -68,10 +69,22 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @CacheEvict(value = "tasks", allEntries = true)
     @Transactional()
+    @ObjectCreatedAspect()
     public Task addGoal(long taskId, Goal goal) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("task id --- " + taskId));
         task.addGoal(goal);
+        return task;
+    }
+
+    @Override
+    @Transactional()
+    @CacheEvict(cacheNames = {"tasks"}, allEntries = true)
+    @ObjectCreatedAspect()
+    public Task addTask(long taskId, SubTask subTask) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new NotFoundException("task id --- " + taskId));
+        task.addSubTask(subTask);
         return task;
     }
 }

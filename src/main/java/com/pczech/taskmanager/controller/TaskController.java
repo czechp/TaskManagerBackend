@@ -1,6 +1,7 @@
 package com.pczech.taskmanager.controller;
 
 import com.pczech.taskmanager.domain.Goal;
+import com.pczech.taskmanager.domain.SubTask;
 import com.pczech.taskmanager.domain.Task;
 import com.pczech.taskmanager.domain.TaskStatus;
 import com.pczech.taskmanager.repository.GoalRepository;
@@ -66,7 +67,17 @@ public class TaskController {
     }
 
 
+    @PostMapping("/{taskId}/subtasks")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Task addSubTask(
+            @PathVariable(name = "taskId") @Min(1L) long taskId,
+            @RequestBody() @Valid() SubTask subTask
+            ){
+        return taskService.addTask(taskId, subTask);
+    }
+
     @GetMapping("/status")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> getStatus() {
         List<Map<String, String>> body = new ArrayList<>();
         Arrays.stream(TaskStatus.values())
