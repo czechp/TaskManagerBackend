@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,7 +18,8 @@ import javax.persistence.Transient;
 @SuperBuilder()
 @Entity(name = "subtasks")
 public class SubTask extends TaskSuperClass {
-    @Transient()
+
+    @Range(min = 0, max = 100)
     private int progress;
 
     @ManyToOne(fetch = FetchType.LAZY)
