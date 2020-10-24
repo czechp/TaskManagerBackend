@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service()
 public class GoalServiceImpl implements GoalService {
-    private GoalRepository goalRepository;
+    private final GoalRepository goalRepository;
 
 
     @Autowired()
@@ -25,10 +25,10 @@ public class GoalServiceImpl implements GoalService {
     public Goal modify(long id, Goal goal) {
         Goal result = goalRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("goal id --- " + id));
-        if(goal.getId() == result.getId()){
+        if (goal.getId() == result.getId()) {
             goal.setTask(result.getTask());
             return goalRepository.save(goal);
-        }else {
+        } else {
             throw new NotFoundException("goal id --- " + id);
         }
     }
@@ -37,7 +37,7 @@ public class GoalServiceImpl implements GoalService {
     @CacheEvict(value = {"tasks"}, allEntries = true)
     @ObjectDeletedAspect()
     public void deleteById(long id) {
-        if(goalRepository.existsById(id))
+        if (goalRepository.existsById(id))
             goalRepository.deleteById(id);
         else
             throw new NotFoundException("goal id --- " + id);

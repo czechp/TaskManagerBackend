@@ -4,8 +4,8 @@ import com.pczech.taskmanager.domain.Goal;
 import com.pczech.taskmanager.domain.SubTask;
 import com.pczech.taskmanager.domain.Task;
 import com.pczech.taskmanager.domain.TaskStatus;
-import com.pczech.taskmanager.repository.GoalRepository;
 import com.pczech.taskmanager.service.TaskService;
+import com.pczech.taskmanager.validator.annotation.TaskOwnerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.*;
 @CrossOrigin("*")
 @Validated()
 public class TaskController {
-    private TaskService taskService;
+    private final TaskService taskService;
 
 
     @Autowired()
@@ -43,26 +43,29 @@ public class TaskController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Task findById(@PathVariable(name = "id") @Min(1L) long id){
+    @TaskOwnerValidator()
+    public Task findById(@PathVariable(name = "id") @Min(1L) long id) {
         return taskService.findById(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @TaskOwnerValidator()
     public Task modify(@PathVariable(name = "id") @Min(1L) long id,
-                       @RequestBody() @Valid() Task task ){
+                       @RequestBody() @Valid() Task task) {
         return taskService.modify(id, task);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable(name = "id") @Min(1L) long id){
+    @TaskOwnerValidator()
+    public void deleteById(@PathVariable(name = "id") @Min(1L) long id) {
         taskService.delete(id);
     }
 
     @PostMapping("/{taskId}/goals")
     public Task addGoal(@PathVariable(value = "taskId") @Min(1L) long taskId,
-                        @RequestBody() Goal goal){
+                        @RequestBody() Goal goal) {
         return taskService.addGoal(taskId, goal);
     }
 
@@ -72,7 +75,7 @@ public class TaskController {
     public Task addSubTask(
             @PathVariable(name = "taskId") @Min(1L) long taskId,
             @RequestBody() @Valid() SubTask subTask
-            ){
+    ) {
         return taskService.addTask(taskId, subTask);
     }
 

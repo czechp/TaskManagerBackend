@@ -7,11 +7,17 @@ import com.pczech.taskmanager.domain.Task;
 import java.util.List;
 
 public interface TaskService {
-    public Task save(Task task);
-    public List<Task> findAll();
-    public Task findById(long id);
-    public Task modify(long id, Task task);
-    public void delete(long id);
+    Task save(Task task);
+
+    List<Task> findAll();
+
+    Task findById(long id);
+
+    Task modify(long id, Task task);
+
+    void delete(long id);
+
     Task addGoal(long taskId, Goal goal);
+
     Task addTask(long taskId, SubTask subTask);
 }

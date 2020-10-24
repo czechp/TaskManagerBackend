@@ -1,7 +1,6 @@
 package com.pczech.taskmanager.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -11,7 +10,6 @@ import org.hibernate.validator.constraints.Range;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 
 @Data()
 @NoArgsConstructor()
@@ -27,7 +25,7 @@ public class SubTask extends TaskSuperClass {
     private Task task;
 
     @Override()
-    public int hashCode(){
+    public int hashCode() {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
         hashCodeBuilder.append(super.getTitle()).append(getId());
         return hashCodeBuilder.toHashCode();

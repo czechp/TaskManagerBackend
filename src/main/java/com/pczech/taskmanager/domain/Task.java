@@ -1,7 +1,6 @@
 package com.pczech.taskmanager.domain;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -9,7 +8,8 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity(name = "tasks")
 @Data()
@@ -42,7 +42,6 @@ public class Task extends TaskSuperClass {
     public void postLoad() {
         //todo: implement recounting progress
     }
-
 
 
     public void addGoal(Goal goal) {

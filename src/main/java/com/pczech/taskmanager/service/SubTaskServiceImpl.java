@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service()
 public class SubTaskServiceImpl implements SubTaskService {
-    private SubTaskRepository subTaskRepository;
+    private final SubTaskRepository subTaskRepository;
 
     @Autowired()
     public SubTaskServiceImpl(SubTaskRepository subTaskRepository) {

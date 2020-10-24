@@ -13,7 +13,7 @@ import javax.validation.constraints.Min;
 @RequestMapping("/api/subtasks")
 @CrossOrigin("*")
 public class SubTaskController {
-    private SubTaskService subTaskService;
+    private final SubTaskService subTaskService;
 
     @Autowired()
     public SubTaskController(SubTaskService subTaskService) {
@@ -25,7 +25,7 @@ public class SubTaskController {
     public SubTask modify(
             @PathVariable(name = "subtaskId") @Min(1L) long subTaskId,
             @RequestBody() @Valid() SubTask subTask
-    ){
+    ) {
         return subTaskService.modify(subTaskId, subTask);
     }
 
@@ -33,7 +33,7 @@ public class SubTaskController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(
             @PathVariable(name = "subtaskId") @Min(1L) long subTaskId
-    ){
+    ) {
         subTaskService.deleteById(subTaskId);
     }
 
