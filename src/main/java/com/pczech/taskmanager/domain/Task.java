@@ -40,8 +40,34 @@ public class Task extends TaskSuperClass {
 
     @PostLoad()
     public void postLoad() {
-        //todo: implement recounting progress
+        recountProgress();
+        specifyStatus();
     }
+
+    private void specifyStatus() {
+        if(super.getTaskStatus() == TaskStatus.IN_PROGRESS){
+            super.setTaskStatus(progress == 100 ? TaskStatus.DONE : TaskStatus.IN_PROGRESS);
+        }
+    }
+
+
+    private void recountProgress() {
+        int allSubtasksNumber = subTasks.size();
+        int doneSubTasksNumber = (int) subTasks.stream()
+                .filter(x -> x.getTaskStatus() == TaskStatus.DONE)
+                .count();
+        if (allSubtasksNumber == doneSubTasksNumber && allSubtasksNumber != 0){
+            progress = 100;
+        }
+        else if (allSubtasksNumber == 0)
+            progress = 0;
+        else
+            progress = (doneSubTasksNumber * 100) / allSubtasksNumber;
+
+    }
+
+
+
 
 
     public void addGoal(Goal goal) {

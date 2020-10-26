@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostLoad;
 
 @Data()
 @NoArgsConstructor()
@@ -29,6 +30,16 @@ public class SubTask extends TaskSuperClass {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
         hashCodeBuilder.append(super.getTitle()).append(getId());
         return hashCodeBuilder.toHashCode();
+    }
+
+    @PostLoad()
+    public void postLoad(){
+        checkTaskStatus();
+    }
+
+    private void checkTaskStatus() {
+        if(progress == 100 && super.getTaskStatus() != TaskStatus.TODO)
+            super.setTaskStatus(TaskStatus.DONE);
     }
 
 }
