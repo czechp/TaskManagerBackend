@@ -105,4 +105,17 @@ public class TaskServiceImpl implements TaskService {
         task.addAppUser(appUser);
         return task;
     }
+
+    @Override
+    @CacheEvict(cacheNames = {"tasks"}, allEntries = true)
+    @Transactional()
+    @ObjectModifiedAspect()
+    public void deleteAppUserFromTask(long taskId, long userId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new NotFoundException("task id --- " + taskId));
+        AppUser appUser = appUserService.findById(userId);
+
+        task.removeAppUser(appUser);
+
+    }
 }

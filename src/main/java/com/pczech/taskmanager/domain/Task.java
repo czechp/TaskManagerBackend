@@ -97,4 +97,9 @@ public class Task extends TaskSuperClass {
         appUsers.add(appUser);
         appUser.getTasks().add(this);
     }
+
+    public void removeAppUser(AppUser appUser) {
+        appUsers.remove(appUser);
+        appUser.getTasks().remove(this);
+    }
 }

@@ -23,4 +23,5 @@ public interface TaskService {
 
     Task addAppUser(long taskId, long userId);
 
+    void deleteAppUserFromTask(long taskId, long userId);
 }

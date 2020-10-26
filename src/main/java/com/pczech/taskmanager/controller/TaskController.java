@@ -9,6 +9,7 @@ import com.pczech.taskmanager.validator.annotation.TaskOwnerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +44,6 @@ public class TaskController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @TaskOwnerValidator()
     public Task findById(@PathVariable(name = "id") @Min(1L) long id) {
         return taskService.findById(id);
     }
@@ -58,12 +58,14 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @TaskOwnerValidator()
+    @Secured(value = {"ROLE_ADMIN", "ROLE_SUPERUSER"})
     public void deleteById(@PathVariable(name = "id") @Min(1L) long id) {
         taskService.delete(id);
     }
 
     @PostMapping("/{taskId}/goals")
+    @ResponseStatus(HttpStatus.CREATED)
+    @TaskOwnerValidator()
     public Task addGoal(@PathVariable(value = "taskId") @Min(1L) long taskId,
                         @RequestBody() Goal goal) {
         return taskService.addGoal(taskId, goal);
@@ -72,6 +74,7 @@ public class TaskController {
 
     @PostMapping("/{taskId}/subtasks")
     @ResponseStatus(HttpStatus.CREATED)
+    @TaskOwnerValidator()
     public Task addSubTask(
             @PathVariable(name = "taskId") @Min(1L) long taskId,
             @RequestBody() @Valid() SubTask subTask
@@ -79,7 +82,8 @@ public class TaskController {
         return taskService.addTask(taskId, subTask);
     }
 
-    //todo: constraint it
+
+    @Secured(value = {"ROLE_ADMIN", "ROLE_SUPERUSER"})
     @PutMapping("/{taskId}/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public Task addAppUser(
@@ -88,6 +92,17 @@ public class TaskController {
     ){
         return taskService.addAppUser(taskId, userId);
     }
+
+    @Secured(value = {"ROLE_ADMIN","ROLE_SUPERUSER"})
+    @DeleteMapping("/{taskId}/users/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAppUserFromTask(
+            @PathVariable(name = "taskId") @Min(1L) long taskId,
+            @PathVariable(name = "userId") @Min(1L) long userId
+    ){
+        taskService.deleteAppUserFromTask(taskId, userId);
+    }
+
     @GetMapping("/status")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> getStatus() {
