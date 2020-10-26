@@ -3,6 +3,7 @@ package com.pczech.taskmanager.service;
 import com.pczech.taskmanager.aspect.annotation.ObjectCreatedAspect;
 import com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect;
 import com.pczech.taskmanager.aspect.annotation.ObjectModifiedAspect;
+import com.pczech.taskmanager.domain.AppUser;
 import com.pczech.taskmanager.domain.Goal;
 import com.pczech.taskmanager.domain.SubTask;
 import com.pczech.taskmanager.domain.Task;
@@ -19,11 +20,15 @@ import java.util.List;
 @Service()
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
+    private final AppUserService appUserService;
 
     @Autowired()
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, AppUserService appUserService) {
         this.taskRepository = taskRepository;
+        this.appUserService = appUserService;
     }
+
+
 
     @Override
     @CacheEvict(cacheNames = "tasks", allEntries = true)
@@ -85,6 +90,19 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("task id --- " + taskId));
         task.addSubTask(subTask);
+        return task;
+    }
+
+    @Override
+    @CacheEvict(cacheNames = {"tasks"}, allEntries = true)
+    @Transactional()
+    @ObjectModifiedAspect()
+    public Task addAppUser(long taskId, long userId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new NotFoundException("task id --- " + taskId));
+        AppUser appUser = appUserService.findById(userId);
+
+        task.addAppUser(appUser);
         return task;
     }
 }

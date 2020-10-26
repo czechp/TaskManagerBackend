@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -55,6 +56,10 @@ public class AppUser implements UserDetails {
     @JsonIgnore()
     @OneToMany(mappedBy = "repairMan", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
+
+    @JsonIgnore()
+    @ManyToMany()
+    private Set<Task> tasks = new LinkedHashSet<>();
 
     public AppUser() {
         this.username = "";
@@ -110,5 +115,16 @@ public class AppUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return tokenValidation && adminApproved;
+    }
+
+
+    @Override()
+    public int hashCode(){
+        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+        hashCodeBuilder.append(username);
+        hashCodeBuilder.append(id);
+        hashCodeBuilder.append(email);
+
+        return hashCodeBuilder.toHashCode();
     }
 }

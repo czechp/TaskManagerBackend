@@ -166,4 +166,10 @@ public class AppUserServiceImpl implements AppUserService {
         if (!status.equals("activate") && !status.equals("deactivate"))
             throw new BadDataException("Incorrect status value");
     }
+
+    @Override
+    public AppUser findById(long userId) {
+        return appUserRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("appUser id --- " + userId));
+    }
 }

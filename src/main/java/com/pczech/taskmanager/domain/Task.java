@@ -31,7 +31,8 @@ public class Task extends TaskSuperClass {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SubTask> subTasks = new LinkedHashSet<>();
 
-    //todo: Add @ManyToMany with app user
+    @ManyToMany(mappedBy = "tasks")
+    private Set<AppUser> appUsers = new LinkedHashSet<>();
 
     @PrePersist()
     public void initEntity() {
@@ -42,6 +43,32 @@ public class Task extends TaskSuperClass {
     public void postLoad() {
         recountProgress();
         specifyStatus();
+    }
+
+    @PreRemove()
+    public void preRemove(){
+        for (AppUser appUser : appUsers) {
+            appUser.getTasks().remove(this);
+            appUsers = new LinkedHashSet<>();
+        }
+    }
+
+
+    public void addGoal(Goal goal) {
+        this.goals.add(goal);
+        goal.setTask(this);
+    }
+
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hcb = new HashCodeBuilder();
+        hcb.append(super.getTitle());
+        return hcb.toHashCode();
+    }
+
+    public void addSubTask(SubTask subTask) {
+        this.subTasks.add(subTask);
+        subTask.setTask(this);
     }
 
     private void specifyStatus() {
@@ -66,24 +93,8 @@ public class Task extends TaskSuperClass {
 
     }
 
-
-
-
-
-    public void addGoal(Goal goal) {
-        this.goals.add(goal);
-        goal.setTask(this);
-    }
-
-    @Override
-    public int hashCode() {
-        HashCodeBuilder hcb = new HashCodeBuilder();
-        hcb.append(super.getTitle());
-        return hcb.toHashCode();
-    }
-
-    public void addSubTask(SubTask subTask) {
-        this.subTasks.add(subTask);
-        subTask.setTask(this);
+    public void addAppUser(AppUser appUser) {
+        appUsers.add(appUser);
+        appUser.getTasks().add(this);
     }
 }

@@ -20,4 +20,7 @@ public interface TaskService {
     Task addGoal(long taskId, Goal goal);
 
     Task addTask(long taskId, SubTask subTask);
+
+    Task addAppUser(long taskId, long userId);
+
 }

@@ -79,6 +79,15 @@ public class TaskController {
         return taskService.addTask(taskId, subTask);
     }
 
+    //todo: constraint it
+    @PutMapping("/{taskId}/users/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Task addAppUser(
+        @PathVariable(name = "taskId") @Min(1L) long taskId,
+        @PathVariable(name = "userId") @Min(1L) long userId
+    ){
+        return taskService.addAppUser(taskId, userId);
+    }
     @GetMapping("/status")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> getStatus() {
