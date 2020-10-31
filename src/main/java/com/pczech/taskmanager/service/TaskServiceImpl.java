@@ -21,14 +21,14 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final AppUserService appUserService;
+    private final EmailSenderService emailSenderService;
 
     @Autowired()
-    public TaskServiceImpl(TaskRepository taskRepository, AppUserService appUserService) {
+    public TaskServiceImpl(TaskRepository taskRepository, AppUserService appUserService, EmailSenderService emailSenderService) {
         this.taskRepository = taskRepository;
         this.appUserService = appUserService;
+        this.emailSenderService = emailSenderService;
     }
-
-
 
     @Override
     @CacheEvict(cacheNames = "tasks", allEntries = true)
@@ -101,8 +101,8 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("task id --- " + taskId));
         AppUser appUser = appUserService.findById(userId);
-
         task.addAppUser(appUser);
+        emailSenderService.sendEmailToAppUserAboutNewTask(userId, task);
         return task;
     }
 
@@ -114,8 +114,6 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("task id --- " + taskId));
         AppUser appUser = appUserService.findById(userId);
-
         task.removeAppUser(appUser);
-
     }
 }

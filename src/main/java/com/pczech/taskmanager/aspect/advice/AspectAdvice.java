@@ -57,6 +57,10 @@ public class AspectAdvice {
                 return "Użytkownik systemu";
             case "Task":
                 return "Praca do wykonania";
+            case "Goal":
+                return "Założenie projektowe";
+            case "Subtask":
+                return "Podzadanie";
             default:
                 return "";
         }
@@ -96,6 +100,11 @@ public class AspectAdvice {
             result = "awaria";
         else if (object instanceof Task)
             result = "praca do wykonania";
+        else if (object instanceof Goal)
+            result = "założenie projektowe";
+        else if (object instanceof SubTask)
+            result = "podzadanie";
+
         return result;
     }
 

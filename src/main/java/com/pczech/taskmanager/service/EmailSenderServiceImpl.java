@@ -1,6 +1,8 @@
 package com.pczech.taskmanager.service;
 
 import com.pczech.taskmanager.domain.AppUser;
+import com.pczech.taskmanager.domain.Task;
+import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -59,5 +61,20 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         simpleMailMessage.setSubject(title);
         simpleMailMessage.setText(content);
         new Thread(new EmailSenderThread(javaMailSender, simpleMailMessage)).start();
+    }
+
+    @Override
+    public void sendEmailToAppUserAboutNewTask(long appUserId, Task task) {
+        AppUser appUser = appUserRepository.findById(appUserId)
+                .orElseThrow(() -> new NotFoundException("appUser id --- " + appUserId));
+        String content = new StringBuilder()
+                .append("Zostałeś dodany do nowego zadania w Managerze Zadań\n")
+                .append("Tytuł: " + task.getTitle() + "\n")
+                .append("Opis: " + task.getDescription() + "\n")
+                .append("Priorytet: " + task.getTaskPriority().getName())
+                .toString();
+
+        sendEmail("Nowa praca do wykonania", content, appUser.getEmail());
+
     }
 }

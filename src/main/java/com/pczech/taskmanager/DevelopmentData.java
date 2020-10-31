@@ -12,6 +12,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -50,7 +51,7 @@ public class DevelopmentData {
                 AppUser.builder()
                         .username("user")
                         .password(passwordEncoder.encode("user"))
-                        .email("user@gmail.com")
+                        .email("webcoderc@gmail.com")
                         .role(AppUserRole.USER)
                         .adminApproved(true)
                         .tokenValidation(true)
@@ -98,7 +99,6 @@ public class DevelopmentData {
         MaintenanceWorker maintenanceWorker1 = maintenanceWorkerRepository.findById(1L).get();
         MaintenanceWorker maintenanceWorker2 = maintenanceWorkerRepository.findById(2L).get();
         MaintenanceWorker maintenanceWorker3 = maintenanceWorkerRepository.findById(3L).get();
-        //task todo
         MaintenanceTask maintenanceTaskToDo = new MaintenanceTask();
         maintenanceTaskToDo.setTitle("Awaria 1");
         maintenanceTaskToDo.setMaintenanceWorker(maintenanceWorker1);
