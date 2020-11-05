@@ -24,7 +24,7 @@ public class Goal {
 
     @NotNull()
     @NotEmpty()
-    @Length(min = 5, max = 30)
+    @Length(min = 5, max = 255)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -58,14 +58,12 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Secured(value = {"ROLE_ADMIN", "ROLE_SUPERUSER"})
     public void deleteById(@PathVariable(name = "id") @Min(1L) long id) {
         taskService.delete(id);
     }
 
     @PostMapping("/{taskId}/goals")
     @ResponseStatus(HttpStatus.CREATED)
-    @TaskOwnerValidator()
     public Task addGoal(@PathVariable(value = "taskId") @Min(1L) long taskId,
                         @RequestBody() Goal goal) {
         return taskService.addGoal(taskId, goal);
@@ -74,7 +72,6 @@ public class TaskController {
 
     @PostMapping("/{taskId}/subtasks")
     @ResponseStatus(HttpStatus.CREATED)
-    @TaskOwnerValidator()
     public Task addSubTask(
             @PathVariable(name = "taskId") @Min(1L) long taskId,
             @RequestBody() @Valid() SubTask subTask
@@ -83,7 +80,6 @@ public class TaskController {
     }
 
 
-    @Secured(value = {"ROLE_ADMIN", "ROLE_SUPERUSER"})
     @PutMapping("/{taskId}/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public Task addAppUser(
