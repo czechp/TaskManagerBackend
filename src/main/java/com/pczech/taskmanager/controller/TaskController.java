@@ -80,7 +80,7 @@ public class TaskController {
     }
 
 
-    @PutMapping("/{taskId}/users/{userId}")
+    @PostMapping("/{taskId}/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public Task addAppUser(
         @PathVariable(name = "taskId") @Min(1L) long taskId,
