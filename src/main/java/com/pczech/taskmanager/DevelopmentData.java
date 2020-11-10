@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 
 @Component()
 @Slf4j()
@@ -163,6 +164,13 @@ public class DevelopmentData {
                 .description("description task3")
                 .taskPriority(TaskPriority.HIGH)
                 .build();
+
+        task3.setGoals(new LinkedHashSet<>());
+
+        task3.addGoal(Goal.builder().content("Some content1").build());
+        task3.addGoal(Goal.builder().content("Some content2").build());
+        task3.addGoal(Goal.builder().content("Some content3").build());
+
         taskRepository.saveAll(Arrays.asList(task1, task2, task3));
     }
 }
