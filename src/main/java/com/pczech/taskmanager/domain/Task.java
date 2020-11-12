@@ -46,7 +46,7 @@ public class Task extends TaskSuperClass {
     }
 
     @PreRemove()
-    public void preRemove(){
+    public void preRemove() {
         for (AppUser appUser : appUsers) {
             appUser.getTasks().remove(this);
             appUsers = new LinkedHashSet<>();
@@ -72,7 +72,7 @@ public class Task extends TaskSuperClass {
     }
 
     private void specifyStatus() {
-        if(super.getTaskStatus() == TaskStatus.IN_PROGRESS){
+        if (super.getTaskStatus() == TaskStatus.IN_PROGRESS) {
             super.setTaskStatus(progress == 100 ? TaskStatus.DONE : TaskStatus.IN_PROGRESS);
         }
     }
@@ -83,13 +83,16 @@ public class Task extends TaskSuperClass {
         int doneSubTasksNumber = (int) subTasks.stream()
                 .filter(x -> x.getTaskStatus() == TaskStatus.DONE)
                 .count();
-        if (allSubtasksNumber == doneSubTasksNumber && allSubtasksNumber != 0){
+        if (allSubtasksNumber == doneSubTasksNumber && allSubtasksNumber != 0) {
             progress = 100;
-        }
-        else if (allSubtasksNumber == 0)
+        } else if (allSubtasksNumber == 0)
             progress = 0;
         else
-            progress = (doneSubTasksNumber * 100) / allSubtasksNumber;
+            //todo: change this implementation
+//            progress = (doneSubTasksNumber * 100) / allSubtasksNumber;
+            progress = subTasks.stream()
+                    .map(x -> progress)
+            .reduce(0, (subtotal, element)->subtotal+=element) / allSubtasksNumber;
 
     }
 

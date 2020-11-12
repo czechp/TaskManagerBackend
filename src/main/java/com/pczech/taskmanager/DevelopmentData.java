@@ -166,7 +166,32 @@ public class DevelopmentData {
                 .build();
 
         task3.setGoals(new LinkedHashSet<>());
+        task3.setSubTasks(new LinkedHashSet<>());
 
+        SubTask subtask1 = SubTask.builder()
+                .title("Subtask1")
+                .description("Description subtask1")
+                .taskStatus(TaskStatus.TODO)
+                .progress(50)
+                .build();
+
+        SubTask subtask2 = SubTask.builder()
+                .title("Subtask2")
+                .description("Description subtask2")
+                .taskStatus(TaskStatus.IN_PROGRESS)
+                .progress(30)
+                .build();
+
+        SubTask subtask3 = SubTask.builder()
+                .title("Subtask1")
+                .description("Description subtask1")
+                .taskStatus(TaskStatus.DONE)
+                .progress(100)
+                .build();
+
+        task3.addSubTask(subtask1);
+        task3.addSubTask(subtask2);
+        task3.addSubTask(subtask3);
         task3.addGoal(Goal.builder().content("Some content1").build());
         task3.addGoal(Goal.builder().content("Some content2").build());
         task3.addGoal(Goal.builder().content("Some content3").build());
