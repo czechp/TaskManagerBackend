@@ -172,7 +172,7 @@ public class DevelopmentData {
                 .title("Subtask1")
                 .description("Description subtask1")
                 .taskStatus(TaskStatus.TODO)
-                .progress(50)
+                .progress(78)
                 .build();
 
         SubTask subtask2 = SubTask.builder()
