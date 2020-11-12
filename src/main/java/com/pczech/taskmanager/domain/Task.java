@@ -88,11 +88,9 @@ public class Task extends TaskSuperClass {
         } else if (allSubtasksNumber == 0)
             progress = 0;
         else
-            //todo: change this implementation
-//            progress = (doneSubTasksNumber * 100) / allSubtasksNumber;
             progress = subTasks.stream()
-                    .map(x -> progress)
-            .reduce(0, (subtotal, element)->subtotal+=element) / allSubtasksNumber;
+                    .map(x -> x.getProgress())
+            .reduce(0, (subtotal, element)->subtotal+=element)/allSubtasksNumber;
 
     }
 
