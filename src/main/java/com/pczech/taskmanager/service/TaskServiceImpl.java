@@ -3,15 +3,14 @@ package com.pczech.taskmanager.service;
 import com.pczech.taskmanager.aspect.annotation.ObjectCreatedAspect;
 import com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect;
 import com.pczech.taskmanager.aspect.annotation.ObjectModifiedAspect;
-import com.pczech.taskmanager.domain.AppUser;
-import com.pczech.taskmanager.domain.Goal;
-import com.pczech.taskmanager.domain.SubTask;
-import com.pczech.taskmanager.domain.Task;
+import com.pczech.taskmanager.domain.*;
 import com.pczech.taskmanager.exception.NotFoundException;
+import com.pczech.taskmanager.exception.UnauthorizedException;
 import com.pczech.taskmanager.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -115,5 +114,27 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new NotFoundException("task id --- " + taskId));
         AppUser appUser = appUserService.findById(userId);
         task.removeAppUser(appUser);
+    }
+
+    @Override
+    @Transactional()
+    @CacheEvict(cacheNames = {"tasks"}, allEntries = true)
+    @ObjectModifiedAspect()
+    public Task addComment(long taskId, String content) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new NotFoundException("task id ---- " + taskId));
+        Comment comment = new Comment();
+        comment.setOwner(getCurrentUsername());
+        comment.setContent(content);
+        task.addComment(comment);
+        return task;
+    }
+
+    private String getCurrentUsername(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(username!=null)
+            return username;
+        else
+            throw new UnauthorizedException("you are not log in");
     }
 }

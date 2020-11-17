@@ -6,6 +6,7 @@ import com.pczech.taskmanager.domain.Task;
 import com.pczech.taskmanager.domain.TaskStatus;
 import com.pczech.taskmanager.service.TaskService;
 import com.pczech.taskmanager.validator.annotation.TaskOwnerValidator;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +68,15 @@ public class TaskController {
     public Task addGoal(@PathVariable(value = "taskId") @Min(1L) long taskId,
                         @RequestBody() Goal goal) {
         return taskService.addGoal(taskId, goal);
+    }
+
+    @PostMapping("/{taskId}/comments")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Task addComment(
+            @PathVariable(name = "taskId") @Min(1) long taskId,
+            @RequestParam(name = "content") @Length(min = 5, max = 255) String content
+    ){
+        return taskService.addComment(taskId, content);
     }
 
 

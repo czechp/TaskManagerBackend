@@ -31,6 +31,9 @@ public class Task extends TaskSuperClass {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SubTask> subTasks = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new LinkedHashSet<>();
+
     @ManyToMany(mappedBy = "tasks")
     private Set<AppUser> appUsers = new LinkedHashSet<>();
 
@@ -63,6 +66,7 @@ public class Task extends TaskSuperClass {
     public int hashCode() {
         HashCodeBuilder hcb = new HashCodeBuilder();
         hcb.append(super.getTitle());
+        hcb.append(super.getId());
         return hcb.toHashCode();
     }
 
@@ -102,5 +106,10 @@ public class Task extends TaskSuperClass {
     public void removeAppUser(AppUser appUser) {
         appUsers.remove(appUser);
         appUser.getTasks().remove(this);
+    }
+
+    public void addComment(Comment comment) {
+        comment.setTask(this);
+        comments.add(comment);
     }
 }
