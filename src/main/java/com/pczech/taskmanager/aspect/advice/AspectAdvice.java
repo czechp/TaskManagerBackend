@@ -60,7 +60,9 @@ public class AspectAdvice {
             case "Goal":
                 return "Założenie projektowe";
             case "Subtask":
-                return "Podzadanie";
+                return "Zadanie";
+            case "Comment":
+                return "Komentarz";
             default:
                 return "";
         }

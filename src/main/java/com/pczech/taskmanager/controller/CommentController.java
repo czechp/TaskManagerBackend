@@ -1,6 +1,7 @@
 package com.pczech.taskmanager.controller;
 
 import com.pczech.taskmanager.service.CommentService;
+import com.pczech.taskmanager.validator.annotation.CommentOwnerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
+    @CommentOwnerValidator()
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable(name = "commentId") @Min(1L) long commentId){
         commentService.deleteById(commentId);

@@ -167,6 +167,7 @@ public class DevelopmentData {
 
         task3.setGoals(new LinkedHashSet<>());
         task3.setSubTasks(new LinkedHashSet<>());
+        task3.setComments(new LinkedHashSet<>());
 
         SubTask subtask1 = SubTask.builder()
                 .title("Subtask1")
@@ -188,6 +189,20 @@ public class DevelopmentData {
                 .taskStatus(TaskStatus.DONE)
                 .progress(100)
                 .build();
+
+        Comment comment1 = new Comment();
+        comment1.setOwner("admin");
+        comment1.setContent("Comment 1 content");
+        Comment comment2 = new Comment();
+        comment2.setOwner("superuser");
+        comment2.setContent("Comment 2 content");
+        Comment comment3 = new Comment();
+        comment3.setOwner("user");
+        comment3.setContent("Comment 3 content");
+
+        task3.addComment(comment1);
+        task3.addComment(comment2);
+        task3.addComment(comment3);
 
         task3.addSubTask(subtask1);
         task3.addSubTask(subtask2);

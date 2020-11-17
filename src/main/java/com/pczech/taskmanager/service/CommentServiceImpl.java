@@ -1,5 +1,6 @@
 package com.pczech.taskmanager.service;
 
+import com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect;
 import com.pczech.taskmanager.domain.Comment;
 import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.repository.CommentRepository;
@@ -21,6 +22,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     @CacheEvict(cacheNames = {"tasks"}, allEntries = true)
+    @ObjectDeletedAspect()
     public void deleteById(long id) {
         if(commentRepository.existsById(id))
             commentRepository.deleteById(id);
