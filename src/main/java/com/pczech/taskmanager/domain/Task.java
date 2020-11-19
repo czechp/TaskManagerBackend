@@ -37,10 +37,11 @@ public class Task extends TaskSuperClass {
     @ManyToMany(mappedBy = "tasks")
     private Set<AppUser> appUsers = new LinkedHashSet<>();
 
-    @PrePersist()
-    public void initEntity() {
-        super.setTaskStatus(TaskStatus.TODO);
-    }
+    //todo: uncomment this
+//    @PrePersist()
+//    public void initEntity() {
+//        super.setTaskStatus(TaskStatus.TODO);
+//    }
 
     @PostLoad()
     public void postLoad() {

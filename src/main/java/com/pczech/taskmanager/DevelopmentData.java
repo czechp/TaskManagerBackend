@@ -148,6 +148,7 @@ public class DevelopmentData {
                 .finishDate(LocalDateTime.now())
                 .title("task1")
                 .description("description task1")
+                .taskStatus(TaskStatus.TODO)
                 .taskPriority(TaskPriority.LOW)
                 .build();
 
@@ -156,6 +157,7 @@ public class DevelopmentData {
                 .title("task2")
                 .description("description task1")
                 .taskPriority(TaskPriority.MEDIUM)
+                .taskStatus(TaskStatus.IN_PROGRESS)
                 .build();
 
         Task task3 = Task.builder()
@@ -163,6 +165,7 @@ public class DevelopmentData {
                 .title("task3")
                 .description("description task3")
                 .taskPriority(TaskPriority.HIGH)
+                .taskStatus(TaskStatus.DONE)
                 .build();
 
         task3.setGoals(new LinkedHashSet<>());
