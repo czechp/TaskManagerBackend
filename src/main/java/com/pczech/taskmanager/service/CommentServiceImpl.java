@@ -1,14 +1,11 @@
 package com.pczech.taskmanager.service;
 
 import com.pczech.taskmanager.aspect.annotation.ObjectDeletedAspect;
-import com.pczech.taskmanager.domain.Comment;
 import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service()
 public class CommentServiceImpl implements CommentService{

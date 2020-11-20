@@ -1,11 +1,10 @@
 package com.pczech.taskmanager.validator.implementation;
 
 import com.pczech.taskmanager.domain.AppUserRole;
-import com.pczech.taskmanager.domain.Comment;
+import com.pczech.taskmanager.domain.TaskComment;
 import com.pczech.taskmanager.exception.UnauthorizedException;
 import com.pczech.taskmanager.repository.CommentRepository;
 import com.pczech.taskmanager.validator.annotation.CommentOwnerValidator;
-import com.pczech.taskmanager.validator.annotation.TaskOwnerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -45,7 +44,7 @@ public class CommentOwnerValidatorImpl implements ConstraintValidator<CommentOwn
     }
 
     private boolean isOwner(long id) {
-        Optional<Comment> optionalComment = commentRepository.findById(id);
+        Optional<TaskComment> optionalComment = commentRepository.findById(id);
         return optionalComment.isPresent() && optionalComment.get().getOwner().equals(getUsername());
     }
 

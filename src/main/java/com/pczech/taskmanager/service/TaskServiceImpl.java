@@ -123,10 +123,10 @@ public class TaskServiceImpl implements TaskService {
     public Task addComment(long taskId, String content) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("task id ---- " + taskId));
-        Comment comment = new Comment();
-        comment.setOwner(getCurrentUsername());
-        comment.setContent(content);
-        task.addComment(comment);
+        TaskComment taskComment = new TaskComment();
+        taskComment.setOwner(getCurrentUsername());
+        taskComment.setContent(content);
+        task.addComment(taskComment);
         return task;
     }
 

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -15,25 +16,11 @@ import java.time.LocalDateTime;
 
 @Entity(name = "comments")
 @Data()
-@Builder()
+@SuperBuilder()
 @NoArgsConstructor()
 @AllArgsConstructor()
-public class Comment {
+public class TaskComment extends CommentSuperClass {
 
-    @Id()
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @NotNull(message = "Owner cannot be null")
-    @NotBlank(message = "Owner cannot be blank")
-    private String owner;
-
-    @NotNull(message = "Content cannot be null")
-    @NotBlank(message = "Content cannot be blank")
-    private String content;
-
-    @CreationTimestamp()
-    private LocalDateTime creationDate;
 
     @JsonIgnore()
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,9 +29,9 @@ public class Comment {
     @Override()
     public int hashCode(){
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-        hashCodeBuilder.append(id);
-        hashCodeBuilder.append(owner);
-        hashCodeBuilder.append(content);
+        hashCodeBuilder.append(super.getId());
+        hashCodeBuilder.append(super.getOwner());
+        hashCodeBuilder.append(super.getContent());
         return hashCodeBuilder.toHashCode();
     }
 }

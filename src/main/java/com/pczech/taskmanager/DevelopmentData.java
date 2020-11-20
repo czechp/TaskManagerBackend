@@ -12,7 +12,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -170,7 +169,7 @@ public class DevelopmentData {
 
         task3.setGoals(new LinkedHashSet<>());
         task3.setSubTasks(new LinkedHashSet<>());
-        task3.setComments(new LinkedHashSet<>());
+        task3.setTaskComments(new LinkedHashSet<>());
 
         SubTask subtask1 = SubTask.builder()
                 .title("Subtask1")
@@ -193,19 +192,19 @@ public class DevelopmentData {
                 .progress(100)
                 .build();
 
-        Comment comment1 = new Comment();
-        comment1.setOwner("admin");
-        comment1.setContent("Comment 1 content");
-        Comment comment2 = new Comment();
-        comment2.setOwner("superuser");
-        comment2.setContent("Comment 2 content");
-        Comment comment3 = new Comment();
-        comment3.setOwner("user");
-        comment3.setContent("Comment 3 content");
+        TaskComment taskComment1 = new TaskComment();
+        taskComment1.setOwner("admin");
+        taskComment1.setContent("Comment 1 content");
+        TaskComment taskComment2 = new TaskComment();
+        taskComment2.setOwner("superuser");
+        taskComment2.setContent("Comment 2 content");
+        TaskComment taskComment3 = new TaskComment();
+        taskComment3.setOwner("user");
+        taskComment3.setContent("Comment 3 content");
 
-        task3.addComment(comment1);
-        task3.addComment(comment2);
-        task3.addComment(comment3);
+        task3.addComment(taskComment1);
+        task3.addComment(taskComment2);
+        task3.addComment(taskComment3);
 
         task3.addSubTask(subtask1);
         task3.addSubTask(subtask2);
