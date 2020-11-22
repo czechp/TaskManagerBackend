@@ -160,7 +160,7 @@ public class TaskServiceImpl implements TaskService {
     private String getFinishTaskEmailContent(Task task, String conclusion) {
         String users = task.getAppUsers()
                 .stream()
-                .map(x -> x.getFullName())
+                .map(x -> x.getFullName() + " (" + x.getEmail() + ")")
                 .reduce("", (acumulator, element) -> acumulator + element + "\n");
         return new StringBuilder()
                 .append("Praca ")
