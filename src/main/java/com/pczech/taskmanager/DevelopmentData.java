@@ -51,10 +51,12 @@ public class DevelopmentData {
                 AppUser.builder()
                         .username("user")
                         .password(passwordEncoder.encode("user"))
-                        .email("webcoderc@gmail.com")
+                        .email("webcoderasdc@gmail.com")
                         .role(AppUserRole.USER)
                         .adminApproved(true)
                         .tokenValidation(true)
+                        .firstName("John")
+                        .secondName("Lenon")
                         .build()
         );
 
@@ -66,16 +68,20 @@ public class DevelopmentData {
                         .role(AppUserRole.SUPERUSER)
                         .adminApproved(true)
                         .tokenValidation(true)
+                        .firstName("Peter")
+                        .secondName("Parker")
                         .build()
         );
         appUserRepository.save(
                 AppUser.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
-                        .email("webcoderc@gmail.com")
+                        .email("webcoderc123@gmail.com")
                         .role(AppUserRole.ADMIN)
                         .adminApproved(true)
                         .tokenValidation(true)
+                        .firstName("Jan")
+                        .secondName("Kowalski")
                         .build()
         );
     }
@@ -195,12 +201,15 @@ public class DevelopmentData {
         TaskComment taskComment1 = new TaskComment();
         taskComment1.setOwner("admin");
         taskComment1.setContent("Comment 1 content");
+        taskComment1.setFullName("Jacek Kowalski");
         TaskComment taskComment2 = new TaskComment();
         taskComment2.setOwner("superuser");
         taskComment2.setContent("Comment 2 content");
+        taskComment2.setFullName("Mirosław Peszko");
         TaskComment taskComment3 = new TaskComment();
         taskComment3.setOwner("user");
         taskComment3.setContent("Comment 3 content");
+        taskComment3.setFullName("Michał Placek");
 
         task3.addComment(taskComment1);
         task3.addComment(taskComment2);

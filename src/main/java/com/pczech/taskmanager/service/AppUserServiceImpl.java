@@ -161,15 +161,24 @@ public class AppUserServiceImpl implements AppUserService {
                 .orElseThrow(() -> new NotFoundException("appUser username --- " + username));
     }
 
-    //private method section
-    private void activateUserStatusCorrect(String status) {
-        if (!status.equals("activate") && !status.equals("deactivate"))
-            throw new BadDataException("Incorrect status value");
-    }
 
     @Override
     public AppUser findById(long userId) {
         return appUserRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("appUser id --- " + userId));
     }
+
+    @Override
+    public String getFullName(AppUser appUser) {
+        return appUserRepository.findByUsername(appUser.getUsername())
+                .orElseThrow(()-> new NotFoundException("appUser username --- " + appUser.getUsername()))
+                .getFullName();
+    }
+
+    //private method section
+    private void activateUserStatusCorrect(String status) {
+        if (!status.equals("activate") && !status.equals("deactivate"))
+            throw new BadDataException("Incorrect status value");
+    }
+
 }

@@ -32,7 +32,12 @@ public class CommentSuperClass {
 
     @NotNull(message = "Content cannot be null")
     @NotBlank(message = "Content cannot be blank")
+    private String fullName;
+
+    @NotNull(message = "Content cannot be null")
+    @NotBlank(message = "Content cannot be blank")
     private String content;
+
 
     @CreationTimestamp()
     private LocalDateTime creationDate;

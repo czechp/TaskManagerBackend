@@ -126,6 +126,7 @@ public class TaskServiceImpl implements TaskService {
         TaskComment taskComment = new TaskComment();
         taskComment.setOwner(getCurrentUsername());
         taskComment.setContent(content);
+        taskComment.setFullName(getCurrentUserFullName());
         task.addComment(taskComment);
         return task;
     }
@@ -136,5 +137,9 @@ public class TaskServiceImpl implements TaskService {
             return username;
         else
             throw new UnauthorizedException("you are not log in");
+    }
+
+    private String getCurrentUserFullName(){
+        return this.appUserService.findByUsername(getCurrentUsername()).getFullName();
     }
 }
