@@ -131,15 +131,48 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
-    private String getCurrentUsername(){
+    @Transactional()
+    @CacheEvict(cacheNames = {"tasks"}, allEntries = true)
+    @ObjectModifiedAspect()
+    @Override
+    public Task finishTask(long taskId, List<String> emails, String conclusion) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new NotFoundException("task id --- " + taskId));
+        task.setTaskStatus(TaskStatus.DONE);
+        emailSenderService.sendEmailToFollowAddresses(emails,
+                task.getTitle() + " --- praca zakończona",
+                getFinishTaskEmailContent(task, conclusion));
+        return task;
+    }
+
+    private String getCurrentUsername() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(username!=null)
+        if (username != null)
             return username;
         else
             throw new UnauthorizedException("you are not log in");
     }
 
-    private String getCurrentUserFullName(){
+    private String getCurrentUserFullName() {
         return this.appUserService.findByUsername(getCurrentUsername()).getFullName();
+    }
+
+    private String getFinishTaskEmailContent(Task task, String conclusion) {
+        String users = task.getAppUsers()
+                .stream()
+                .map(x -> x.getFullName())
+                .reduce("", (acumulator, element) -> acumulator + element + "\n");
+        return new StringBuilder()
+                .append("Praca ")
+                .append(task.getTitle())
+                .append(" została zakończona")
+                .append("\n")
+                .append("Osoby odpowiedzialne: \n")
+                .append(users)
+                .append("-------------------------------------\n")
+                .append("Podsumowanie: \n")
+                .append(conclusion)
+                .toString();
+
     }
 }

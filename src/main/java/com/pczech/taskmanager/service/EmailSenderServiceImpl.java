@@ -35,24 +35,12 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         sendEmail("Aktywacja konta  w menadżerze zadań", body, email);
     }
 
-    private String createAddress(ServletRequest servletRequest) {
-        return "http://" + servletRequest.getServerName() + ":" + servletRequest.getServerPort();
-    }
-
-
     @Override
     public void sendEmailToEverybody(String title, String body) {
         List<String> emails = getAllUsersEmails();
         for (String email : emails) {
             sendEmail(title, body, email);
         }
-    }
-
-    private List<String> getAllUsersEmails() {
-        return appUserRepository.findAll()
-                .stream()
-                .map(AppUser::getEmail)
-                .collect(Collectors.toList());
     }
 
     public void sendEmail(String title, String content, String email) {
@@ -77,4 +65,24 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         sendEmail("Nowa praca do wykonania", content, appUser.getEmail());
 
     }
+
+    @Override
+    public void sendEmailToFollowAddresses(List<String> emails, String subject, String content) {
+        for (String email : emails) {
+            sendEmail(subject, content, email);
+        }
+    }
+
+    private List<String> getAllUsersEmails() {
+        return appUserRepository.findAll()
+                .stream()
+                .map(AppUser::getEmail)
+                .collect(Collectors.toList());
+    }
+
+    private String createAddress(ServletRequest servletRequest) {
+        return "http://" + servletRequest.getServerName() + ":" + servletRequest.getServerPort();
+    }
+
+
 }
