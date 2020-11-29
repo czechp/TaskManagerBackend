@@ -48,6 +48,7 @@ public class AppUserController {
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("jwt", appUserService.login(appUser));
         responseBody.put("role", appUserService.getRoleForUser(appUser));
+        responseBody.put("fullName", appUserService.getFullName(appUser));
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

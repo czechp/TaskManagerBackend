@@ -12,7 +12,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -52,10 +51,12 @@ public class DevelopmentData {
                 AppUser.builder()
                         .username("user")
                         .password(passwordEncoder.encode("user"))
-                        .email("webcoderc@gmail.com")
+                        .email("webcoderasdc@gmail.com")
                         .role(AppUserRole.USER)
                         .adminApproved(true)
                         .tokenValidation(true)
+                        .firstName("John")
+                        .secondName("Lenon")
                         .build()
         );
 
@@ -67,16 +68,20 @@ public class DevelopmentData {
                         .role(AppUserRole.SUPERUSER)
                         .adminApproved(true)
                         .tokenValidation(true)
+                        .firstName("Peter")
+                        .secondName("Parker")
                         .build()
         );
         appUserRepository.save(
                 AppUser.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
-                        .email("webcoderc@gmail.com")
+                        .email("webcoderc123@gmail.com")
                         .role(AppUserRole.ADMIN)
                         .adminApproved(true)
                         .tokenValidation(true)
+                        .firstName("Jan")
+                        .secondName("Kowalski")
                         .build()
         );
     }
@@ -148,6 +153,7 @@ public class DevelopmentData {
                 .finishDate(LocalDateTime.now())
                 .title("task1")
                 .description("description task1")
+                .taskStatus(TaskStatus.TODO)
                 .taskPriority(TaskPriority.LOW)
                 .build();
 
@@ -156,6 +162,7 @@ public class DevelopmentData {
                 .title("task2")
                 .description("description task1")
                 .taskPriority(TaskPriority.MEDIUM)
+                .taskStatus(TaskStatus.IN_PROGRESS)
                 .build();
 
         Task task3 = Task.builder()
@@ -163,11 +170,12 @@ public class DevelopmentData {
                 .title("task3")
                 .description("description task3")
                 .taskPriority(TaskPriority.HIGH)
+                .taskStatus(TaskStatus.DONE)
                 .build();
 
         task3.setGoals(new LinkedHashSet<>());
         task3.setSubTasks(new LinkedHashSet<>());
-        task3.setComments(new LinkedHashSet<>());
+        task3.setTaskComments(new LinkedHashSet<>());
 
         SubTask subtask1 = SubTask.builder()
                 .title("Subtask1")
@@ -190,19 +198,22 @@ public class DevelopmentData {
                 .progress(100)
                 .build();
 
-        Comment comment1 = new Comment();
-        comment1.setOwner("admin");
-        comment1.setContent("Comment 1 content");
-        Comment comment2 = new Comment();
-        comment2.setOwner("superuser");
-        comment2.setContent("Comment 2 content");
-        Comment comment3 = new Comment();
-        comment3.setOwner("user");
-        comment3.setContent("Comment 3 content");
+        TaskComment taskComment1 = new TaskComment();
+        taskComment1.setOwner("admin");
+        taskComment1.setContent("Comment 1 content");
+        taskComment1.setFullName("Jacek Kowalski");
+        TaskComment taskComment2 = new TaskComment();
+        taskComment2.setOwner("superuser");
+        taskComment2.setContent("Comment 2 content");
+        taskComment2.setFullName("Mirosław Peszko");
+        TaskComment taskComment3 = new TaskComment();
+        taskComment3.setOwner("user");
+        taskComment3.setContent("Comment 3 content");
+        taskComment3.setFullName("Michał Placek");
 
-        task3.addComment(comment1);
-        task3.addComment(comment2);
-        task3.addComment(comment3);
+        task3.addComment(taskComment1);
+        task3.addComment(taskComment2);
+        task3.addComment(taskComment3);
 
         task3.addSubTask(subtask1);
         task3.addSubTask(subtask2);

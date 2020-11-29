@@ -121,4 +121,13 @@ public class TaskController {
                 });
         return ResponseEntity.ok(body);
     }
+
+    @PutMapping("/{taskId}/finish")
+    public  Task finishTask(
+            @PathVariable(name = "taskId") @Min(1L) long taskId,
+            @RequestBody() List<String> emails,
+            @RequestParam(name = "conclusion") @Length(min=5) String conclusion
+    ){
+        return taskService.finishTask(taskId, emails, conclusion);
+    }
 }

@@ -26,4 +26,6 @@ public interface TaskService {
     void deleteAppUserFromTask(long taskId, long userId);
 
     Task addComment(long taskId, String content);
+
+    Task finishTask(long taskId, List<String> emails, String conclusion);
 }

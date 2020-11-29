@@ -32,15 +32,16 @@ public class Task extends TaskSuperClass {
     private Set<SubTask> subTasks = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Comment> comments = new LinkedHashSet<>();
+    private Set<TaskComment> taskComments = new LinkedHashSet<>();
 
     @ManyToMany(mappedBy = "tasks")
     private Set<AppUser> appUsers = new LinkedHashSet<>();
 
-    @PrePersist()
-    public void initEntity() {
-        super.setTaskStatus(TaskStatus.TODO);
-    }
+    //todo: uncomment this
+//    @PrePersist()
+//    public void initEntity() {
+//        super.setTaskStatus(TaskStatus.TODO);
+//    }
 
     @PostLoad()
     public void postLoad() {
@@ -108,8 +109,8 @@ public class Task extends TaskSuperClass {
         appUser.getTasks().remove(this);
     }
 
-    public void addComment(Comment comment) {
-        comment.setTask(this);
-        comments.add(comment);
+    public void addComment(TaskComment taskComment) {
+        taskComment.setTask(this);
+        taskComments.add(taskComment);
     }
 }

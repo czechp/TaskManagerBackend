@@ -34,4 +34,5 @@ public interface AppUserService {
 
     AppUser findById(long userId);
 
+    String getFullName(AppUser appUser);
 }

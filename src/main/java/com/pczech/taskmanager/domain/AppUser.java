@@ -40,6 +40,23 @@ public class AppUser implements UserDetails {
     @Length(min = 7)
     private String password;
 
+
+    @NotNull(message = "First name cannot be null")
+    @NotEmpty(message = "First name cannot be empty")
+    @NotBlank(message = "First name cannot be blank")
+    @Length(min = 3)
+    private String firstName;
+
+    @NotNull(message = "Second name cannot be null")
+    @NotEmpty(message = "Second name cannot be empty")
+    @NotBlank(message = "First name cannot be blank")
+    @Length(min = 3)
+    private String secondName;
+
+    @Transient()
+    private String fullName;
+
+
     @Email(message = "It's not correct e-mail address")
     private String email;
 
@@ -76,6 +93,11 @@ public class AppUser implements UserDetails {
     public void preRemove() {
         maintenanceTasks.forEach(x -> x.setRepairMan(null));
         maintenanceTasks = null;
+    }
+
+    @PostLoad()
+    public void postLoad(){
+        fullName = firstName + " " + secondName;
     }
 
     @Override
