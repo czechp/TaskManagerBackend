@@ -53,6 +53,8 @@ public class AppUser implements UserDetails {
     @Length(min = 3)
     private String secondName;
 
+
+
     @Transient()
     private String fullName;
 
@@ -77,6 +79,10 @@ public class AppUser implements UserDetails {
     @JsonIgnore()
     @ManyToMany()
     private Set<Task> tasks = new LinkedHashSet<>();
+
+    @JsonIgnore()
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Announcement> announcements = new LinkedHashSet<>();
 
     public AppUser() {
         this.username = "";
