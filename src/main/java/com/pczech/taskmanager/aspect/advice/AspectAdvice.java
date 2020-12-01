@@ -63,6 +63,8 @@ public class AspectAdvice {
                 return "Zadanie";
             case "Comment":
                 return "Komentarz";
+            case "Announcement":
+                return "Ogłoszenie";
             default:
                 return "";
         }
@@ -106,6 +108,8 @@ public class AspectAdvice {
             result = "założenie projektowe";
         else if (object instanceof SubTask)
             result = "podzadanie";
+        else if (object instanceof Announcement)
+            result = "ogłoszenie";
 
         return result;
     }

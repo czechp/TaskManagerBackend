@@ -16,7 +16,7 @@ import java.util.Optional;
 @SupportedValidationTarget(ValidationTarget.PARAMETERS)
 public class TaskOwnerValidatorImpl implements ConstraintValidator<TaskOwnerValidator, Object[]> {
 
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
 
     @Autowired()
     public TaskOwnerValidatorImpl(TaskRepository taskRepository) {
@@ -31,11 +31,11 @@ public class TaskOwnerValidatorImpl implements ConstraintValidator<TaskOwnerVali
 
     private boolean isOwner(long taskId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<Task> optionalTask = taskRepository.findById((long) taskId);
-        if(optionalTask.isPresent()){
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
+        if (optionalTask.isPresent()) {
             return optionalTask.get().getAppUsers()
                     .stream()
-                    .anyMatch(x->x.getUsername().equals(username));
+                    .anyMatch(x -> x.getUsername().equals(username));
         }
         return true;
     }

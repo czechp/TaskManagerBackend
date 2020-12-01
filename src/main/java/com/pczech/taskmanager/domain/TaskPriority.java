@@ -8,7 +8,7 @@ public enum TaskPriority {
     MEDIUM("Średni"),
     HIGH("Wysoki");
 
-    private String name;
+    private final String name;
 
     TaskPriority(String name) {
         this.name = name;

@@ -95,7 +95,7 @@ public class Task extends TaskSuperClass {
         else
             progress = subTasks.stream()
                     .map(x -> x.getProgress())
-            .reduce(0, (subtotal, element)->subtotal+=element)/allSubtasksNumber;
+                    .reduce(0, (subtotal, element) -> subtotal += element) / allSubtasksNumber;
 
     }
 

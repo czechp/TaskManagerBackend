@@ -8,9 +8,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 @Service()
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
 
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired()
     public CommentServiceImpl(CommentRepository commentRepository) {
@@ -21,7 +21,7 @@ public class CommentServiceImpl implements CommentService{
     @CacheEvict(cacheNames = {"tasks"}, allEntries = true)
     @ObjectDeletedAspect()
     public void deleteById(long id) {
-        if(commentRepository.existsById(id))
+        if (commentRepository.existsById(id))
             commentRepository.deleteById(id);
         else
             throw new NotFoundException("comment id --- " + id);

@@ -15,16 +15,15 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
 import javax.servlet.ServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service()
 public class AppUserServiceImpl implements AppUserService {
@@ -113,7 +112,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    @CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = {"tasks, users", "announcements, maintenance-tasks"}, allEntries = true)
     @ObjectDeletedAspect()
     public void deleteUserById(long id) {
         if (appUserRepository.existsById(id)) {
@@ -171,8 +170,28 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public String getFullName(AppUser appUser) {
         return appUserRepository.findByUsername(appUser.getUsername())
-                .orElseThrow(()-> new NotFoundException("appUser username --- " + appUser.getUsername()))
+                .orElseThrow(() -> new NotFoundException("appUser username --- " + appUser.getUsername()))
                 .getFullName();
+    }
+
+    @Override
+    public AppUser getCurrentUser() {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        return appUserRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new NotFoundException("username --- " + currentUsername));
+
+    }
+
+    @Override
+    public Set<String> getCurrentUserRoles() {
+        return SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .map(x -> x.getAuthority().substring(5))
+                .collect(Collectors.toSet());
+
     }
 
     //private method section

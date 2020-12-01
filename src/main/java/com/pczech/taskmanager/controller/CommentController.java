@@ -14,7 +14,7 @@ import javax.validation.constraints.Min;
 @Validated()
 @CrossOrigin("*")
 public class CommentController {
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @Autowired()
     public CommentController(CommentService commentService) {
@@ -24,7 +24,7 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     @CommentOwnerValidator()
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable(name = "commentId") @Min(1L) long commentId){
+    public void deleteById(@PathVariable(name = "commentId") @Min(1L) long commentId) {
         commentService.deleteById(commentId);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.validation.Errors;
 import javax.servlet.ServletRequest;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface AppUserService {
     AppUser register(AppUser appUser, Errors errors, ServletRequest servletRequest);
@@ -35,4 +36,8 @@ public interface AppUserService {
     AppUser findById(long userId);
 
     String getFullName(AppUser appUser);
+
+    AppUser getCurrentUser();
+
+    Set<String> getCurrentUserRoles();
 }

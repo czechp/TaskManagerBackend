@@ -2,17 +2,14 @@ package com.pczech.taskmanager.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "comments")
 @Data()
@@ -27,7 +24,7 @@ public class TaskComment extends CommentSuperClass {
     private Task task;
 
     @Override()
-    public int hashCode(){
+    public int hashCode() {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
         hashCodeBuilder.append(super.getId());
         hashCodeBuilder.append(super.getOwner());

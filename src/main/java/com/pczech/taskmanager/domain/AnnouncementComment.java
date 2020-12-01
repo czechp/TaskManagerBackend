@@ -15,20 +15,20 @@ import javax.persistence.PreRemove;
 @Data()
 @SuperBuilder()
 @NoArgsConstructor()
-public class AnnouncementComment extends CommentSuperClass{
+public class AnnouncementComment extends CommentSuperClass {
 
     @JsonIgnore()
     @ManyToOne(fetch = FetchType.LAZY)
     private Announcement announcement;
 
     @PreRemove()
-    public void preRemove(){
+    public void preRemove() {
         announcement.getComments().remove(this);
         announcement = null;
     }
 
     @Override()
-    public int hashCode(){
+    public int hashCode() {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
         hashCodeBuilder.append(super.getId());
         hashCodeBuilder.append(super.getContent());

@@ -1,10 +1,7 @@
 package com.pczech.taskmanager;
 
 import com.pczech.taskmanager.domain.*;
-import com.pczech.taskmanager.repository.AppUserRepository;
-import com.pczech.taskmanager.repository.MaintenanceTaskRepository;
-import com.pczech.taskmanager.repository.MaintenanceWorkerRepository;
-import com.pczech.taskmanager.repository.TaskRepository;
+import com.pczech.taskmanager.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
@@ -25,13 +22,15 @@ public class DevelopmentData {
     private final MaintenanceTaskRepository maintenanceTaskRepository;
     private final MaintenanceWorkerRepository maintenanceWorkerRepository;
     private final TaskRepository taskRepository;
+    private final AnnouncementRepository announcementRepository;
 
-    public DevelopmentData(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, MaintenanceTaskRepository maintenanceTaskRepository, MaintenanceWorkerRepository maintenanceWorkerRepository, TaskRepository taskRepository) {
+    public DevelopmentData(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, MaintenanceTaskRepository maintenanceTaskRepository, MaintenanceWorkerRepository maintenanceWorkerRepository, TaskRepository taskRepository, AnnouncementRepository announcementRepository) {
         this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.maintenanceTaskRepository = maintenanceTaskRepository;
         this.maintenanceWorkerRepository = maintenanceWorkerRepository;
         this.taskRepository = taskRepository;
+        this.announcementRepository = announcementRepository;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -41,6 +40,7 @@ public class DevelopmentData {
         createMaintenanceWorkers();
         createMaintenanceTask();
         createTask();
+        createAnnouncements();
         log.info("End of development method");
     }
 
@@ -223,5 +223,21 @@ public class DevelopmentData {
         task3.addGoal(Goal.builder().content("Some content3").build());
 
         taskRepository.saveAll(Arrays.asList(task1, task2, task3));
+    }
+
+    public void createAnnouncements() {
+        Announcement announcement = new Announcement();
+        AppUser appUser = appUserRepository.findById(1L).get();
+        announcement.setTitle("Some announcement");
+        announcement.setContent("Some content");
+        announcement.setAppUser(appUser);
+        AnnouncementComment announcementComment = new AnnouncementComment();
+        announcementComment.setOwner(appUser.getUsername());
+        announcementComment.setFullName(appUser.getFirstName() + " " + appUser.getSecondName());
+        announcementComment.setContent("Some announcement comment content");
+        announcement.addComment(announcementComment);
+
+        announcementRepository.save(announcement);
+
     }
 }

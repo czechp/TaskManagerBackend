@@ -1,6 +1,7 @@
 package com.pczech.taskmanager.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ import java.util.*;
 @AllArgsConstructor()
 @Builder()
 @Entity(name = "users")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class AppUser implements UserDetails {
 
     @Id()
@@ -54,7 +56,6 @@ public class AppUser implements UserDetails {
     private String secondName;
 
 
-
     @Transient()
     private String fullName;
 
@@ -81,7 +82,7 @@ public class AppUser implements UserDetails {
     private Set<Task> tasks = new LinkedHashSet<>();
 
     @JsonIgnore()
-    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Announcement> announcements = new LinkedHashSet<>();
 
     public AppUser() {
@@ -99,10 +100,13 @@ public class AppUser implements UserDetails {
     public void preRemove() {
         maintenanceTasks.forEach(x -> x.setRepairMan(null));
         maintenanceTasks = null;
+        tasks.stream()
+                .filter(task -> task.getAppUsers().contains(this))
+                .forEach(task -> task.removeAppUser(this));
     }
 
     @PostLoad()
-    public void postLoad(){
+    public void postLoad() {
         fullName = firstName + " " + secondName;
     }
 
@@ -147,7 +151,7 @@ public class AppUser implements UserDetails {
 
 
     @Override()
-    public int hashCode(){
+    public int hashCode() {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
         hashCodeBuilder.append(username);
         hashCodeBuilder.append(id);

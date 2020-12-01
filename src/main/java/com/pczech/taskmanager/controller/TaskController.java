@@ -75,7 +75,7 @@ public class TaskController {
     public Task addComment(
             @PathVariable(name = "taskId") @Min(1) long taskId,
             @RequestParam(name = "content") @Length(min = 5, max = 255) String content
-    ){
+    ) {
         return taskService.addComment(taskId, content);
     }
 
@@ -93,19 +93,19 @@ public class TaskController {
     @PostMapping("/{taskId}/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public Task addAppUser(
-        @PathVariable(name = "taskId") @Min(1L) long taskId,
-        @PathVariable(name = "userId") @Min(1L) long userId
-    ){
+            @PathVariable(name = "taskId") @Min(1L) long taskId,
+            @PathVariable(name = "userId") @Min(1L) long userId
+    ) {
         return taskService.addAppUser(taskId, userId);
     }
 
-    @Secured(value = {"ROLE_ADMIN","ROLE_SUPERUSER"})
+    @Secured(value = {"ROLE_ADMIN", "ROLE_SUPERUSER"})
     @DeleteMapping("/{taskId}/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAppUserFromTask(
             @PathVariable(name = "taskId") @Min(1L) long taskId,
             @PathVariable(name = "userId") @Min(1L) long userId
-    ){
+    ) {
         taskService.deleteAppUserFromTask(taskId, userId);
     }
 
@@ -123,11 +123,11 @@ public class TaskController {
     }
 
     @PutMapping("/{taskId}/finish")
-    public  Task finishTask(
+    public Task finishTask(
             @PathVariable(name = "taskId") @Min(1L) long taskId,
             @RequestBody() List<String> emails,
-            @RequestParam(name = "conclusion") @Length(min=5) String conclusion
-    ){
+            @RequestParam(name = "conclusion") @Length(min = 5) String conclusion
+    ) {
         return taskService.finishTask(taskId, emails, conclusion);
     }
 }

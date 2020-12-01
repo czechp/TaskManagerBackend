@@ -36,7 +36,6 @@ public class Announcement {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull(message = "App user cannot be null")
     private AppUser appUser;
 
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -54,6 +53,16 @@ public class Announcement {
         this.appUser = null;
     }
 
+    public void addComment(AnnouncementComment comment) {
+        comment.setAnnouncement(this);
+        comments.add(comment);
+    }
+
+    public void addAppUser(AppUser appUser) {
+        this.appUser = appUser;
+        appUser.getAnnouncements().add(this);
+    }
+
     @Override()
     public int hashCode() {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
@@ -63,5 +72,6 @@ public class Announcement {
         hashCodeBuilder.append(appUser.getId());
         return hashCodeBuilder.toHashCode();
     }
+
 
 }

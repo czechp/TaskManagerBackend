@@ -17,7 +17,7 @@ import java.util.Optional;
 @SupportedValidationTarget(ValidationTarget.PARAMETERS)
 public class CommentOwnerValidatorImpl implements ConstraintValidator<CommentOwnerValidator, Object[]> {
 
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired()
     public CommentOwnerValidatorImpl(CommentRepository commentRepository) {
@@ -26,7 +26,7 @@ public class CommentOwnerValidatorImpl implements ConstraintValidator<CommentOwn
 
     @Override
     public boolean isValid(Object[] objects, ConstraintValidatorContext constraintValidatorContext) {
-        if(!isAdmin() && !isOwner((long) objects[0]))
+        if (!isAdmin() && !isOwner((long) objects[0]))
             throw new UnauthorizedException("You are no owner of comment");
         return true;
     }

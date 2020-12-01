@@ -41,4 +41,5 @@ public class CommentSuperClass {
 
     @CreationTimestamp()
     private LocalDateTime creationDate;
+
 }

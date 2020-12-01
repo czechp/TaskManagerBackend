@@ -33,12 +33,12 @@ public class SubTask extends TaskSuperClass {
     }
 
     @PostLoad()
-    public void postLoad(){
+    public void postLoad() {
         checkTaskStatus();
     }
 
     private void checkTaskStatus() {
-        if(progress == 100 && super.getTaskStatus() != TaskStatus.TODO)
+        if (progress == 100 && super.getTaskStatus() != TaskStatus.TODO)
             super.setTaskStatus(TaskStatus.DONE);
     }
 
