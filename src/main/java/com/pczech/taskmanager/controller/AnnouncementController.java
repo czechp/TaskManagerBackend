@@ -1,6 +1,7 @@
 package com.pczech.taskmanager.controller;
 
 import com.pczech.taskmanager.domain.Announcement;
+import com.pczech.taskmanager.domain.AnnouncementComment;
 import com.pczech.taskmanager.service.AnnouncementService;
 import com.pczech.taskmanager.validator.annotation.AnnouncementOwnerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,24 @@ public class AnnouncementController {
             @PathVariable(name = "id") @Min(1L) long announcementId
     ) {
         return announcementService.findById(announcementId);
+    }
+
+    @PostMapping("/{announcementId}/comments")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Announcement addComment(
+            @PathVariable(name = "announcementId") @Min(1L) long announcementId,
+            @RequestBody() AnnouncementComment announcementComment
+    ) {
+        return announcementService.addComment(announcementId, announcementComment);
+    }
+
+    @PutMapping("/{announcementId}")
+    @ResponseStatus(HttpStatus.OK)
+    @AnnouncementOwnerValidator()
+    public Announcement update(
+            @PathVariable(name = "announcementId") @Min(1L) long announcementId,
+            @RequestBody() @Valid() Announcement announcement
+    ) {
+        return announcementService.update(announcementId, announcement);
     }
 }

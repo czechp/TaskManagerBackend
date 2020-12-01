@@ -32,7 +32,6 @@ public class AnnouncementComment extends CommentSuperClass {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
         hashCodeBuilder.append(super.getId());
         hashCodeBuilder.append(super.getContent());
-        hashCodeBuilder.append(announcement.getId());
         return hashCodeBuilder.toHashCode();
     }
 }
