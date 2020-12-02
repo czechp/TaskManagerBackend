@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Service()
 public class ValidatorService {
-    private Validator validator;
+    private final Validator validator;
 
     public ValidatorService() {
         this.validator = Validation.buildDefaultValidatorFactory().getValidator();

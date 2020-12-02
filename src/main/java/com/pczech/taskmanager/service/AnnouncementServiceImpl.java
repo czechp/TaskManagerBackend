@@ -20,7 +20,7 @@ import java.util.List;
 public class AnnouncementServiceImpl implements AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final AppUserService appUserService;
-    private ValidatorService validatorService;
+    private final ValidatorService validatorService;
 
     @Autowired()
     public AnnouncementServiceImpl(

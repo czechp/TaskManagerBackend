@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository()
 public interface AnnouncementCommentRepository extends JpaRepository<AnnouncementComment, Long> {
+    boolean existsByIdAndOwner(long object, String owner);
+
 }

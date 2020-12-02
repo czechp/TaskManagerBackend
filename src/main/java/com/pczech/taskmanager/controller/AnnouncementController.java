@@ -33,7 +33,7 @@ public class AnnouncementController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Announcement task(
+    public Announcement save(
             @RequestBody() @Valid() Announcement announcement
     ) {
         return announcementService.save(announcement);
