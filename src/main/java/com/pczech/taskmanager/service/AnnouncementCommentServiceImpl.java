@@ -3,6 +3,7 @@ package com.pczech.taskmanager.service;
 import com.pczech.taskmanager.exception.NotFoundException;
 import com.pczech.taskmanager.repository.AnnouncementCommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 @Service()
@@ -15,6 +16,7 @@ public class AnnouncementCommentServiceImpl implements AnnouncementCommentServic
     }
 
     @Override
+    @CacheEvict(cacheNames = {"announcements"}, allEntries = true)
     public void deleteById(long announcementCommentId) {
         if (announcementCommentRepository.existsById(announcementCommentId))
             announcementCommentRepository.deleteById(announcementCommentId);

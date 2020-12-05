@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 @Component()
@@ -235,9 +236,22 @@ public class DevelopmentData {
         announcementComment.setOwner(appUser.getUsername());
         announcementComment.setFullName(appUser.getFirstName() + " " + appUser.getSecondName());
         announcementComment.setContent("Some announcement comment content");
-        announcement.addComment(announcementComment);
 
-        announcementRepository.save(announcement);
+        announcement.addComment(announcementComment);
+        announcement.setId(0L);
+        announcementRepository.saveAndFlush(announcement);
+
+        announcementComment.setId(0L);
+        announcement.setComments(new HashSet<>());
+        announcement.addComment(announcementComment);
+        announcement.setId(0L);
+        announcementRepository.saveAndFlush(announcement);
+
+        announcementComment.setId(0L);
+        announcement.setComments(new HashSet<>());
+        announcement.addComment(announcementComment);
+        announcement.setId(0L);
+        announcementRepository.saveAndFlush(announcement);
 
     }
 }

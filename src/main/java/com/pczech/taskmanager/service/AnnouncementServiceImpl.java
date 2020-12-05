@@ -55,7 +55,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
 
     @Override
-    @CacheEvict(allEntries = true, cacheNames = {"announcements"})
+    @CacheEvict(cacheNames = {"announcements"}, allEntries = true)
     @ObjectDeletedAspect()
     public void deleteById(long announcementId) {
         if (announcementRepository.existsById(announcementId))
